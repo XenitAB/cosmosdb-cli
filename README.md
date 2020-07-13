@@ -4,6 +4,10 @@
 
 CLI client to handle backup of CosmosDB.
 
+# Container Image
+
+Container image available at: quay.io/xenitab/cosmosdb-cli
+
 ## How to use
 
 ## Backup to Azure Storage Account
