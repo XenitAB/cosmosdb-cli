@@ -19,9 +19,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "@types/chalk": "^2.2.0",
     "@types/clear": "^0.1.0",
-    "@types/commander": "^2.12.2",
     "@types/figlet": "^1.2.0",
     "@types/fs-extra": "^9.0.1",
     "@types/node": "^14.0.22",
@@ -37,5 +35,8 @@
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "optionalDependencies": {
+    "fsevents": "^2.1.3"
+  }
 }

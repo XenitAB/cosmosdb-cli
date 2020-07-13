@@ -1,5 +1,7 @@
 # CosmosDB CLI Client
 
+[![Docker Repository on Quay](https://quay.io/repository/xenitab/cosmosdb-cli/status "Docker Repository on Quay")](https://quay.io/repository/xenitab/cosmosdb-cli)
+
 CLI client to handle backup of CosmosDB.
 
 ## How to use
