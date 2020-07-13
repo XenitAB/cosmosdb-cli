@@ -45,7 +45,7 @@ function cli_client_backup_base(): commander.Command {
       )
       .option("--storage-account-key <string>", "Storage Account Key")
       .option("")
-      .option("file-system", "Backup to file system")
+      .option("filesystem", "Backup to file system")
       .option("azure-storage-account", "Backup to Azure Storage Account")
       .option(
         "--cosmosdb-account-endpoint <string>",

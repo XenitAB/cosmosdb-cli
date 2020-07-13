@@ -32,7 +32,7 @@ export async function backup_client(
         );
         break;
       }
-      case "file-system": {
+      case "filesystem": {
         const client = cosmosdb_client(
           get_config_string(config.cosmosdb_account_endpoint, cmdObj),
           get_config_string(config.cosmosdb_account_key, cmdObj)

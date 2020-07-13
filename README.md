@@ -39,5 +39,5 @@ export COSMOSDB_ACCOUNT_ENDPOINT="https://<cosmosdb-account-name>.documents.azur
 export COSMOSDB_ACCOUNT_KEY="<cosmosdb-account-key>"
 export FILESYSTEM_PATH="/tmp/"
 
-cosmosdb-cli backup file-system
+cosmosdb-cli backup filesystem
 ```
