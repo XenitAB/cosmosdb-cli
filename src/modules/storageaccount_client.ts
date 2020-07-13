@@ -52,9 +52,15 @@ export async function UploadContentToStorageAccountContainer(
       container_client,
       blob_name
     );
-    logger.debug(`Backing up to ${blob_name}`);
+    logger.debug({
+      function: "UploadContentToStorageAccountContainer",
+      message: `Uploading up to ${blob_name}`,
+    });
     await block_blob_client.upload(content, Buffer.byteLength(content));
-    logger.debug(`Finished backup to ${blob_name}`);
+    logger.debug({
+      function: "UploadContentToStorageAccountContainer",
+      message: `Finished upload to ${blob_name}`,
+    });
   } catch (e) {
     logger.error({
       function: "UploadContentToStorageAccountContainer",

@@ -21,7 +21,15 @@ export function SaveContentToFilesystem(
 ): void {
   try {
     CreateDirectoriesRecursive(file_name);
+    logger.debug({
+      function: "SaveContentToFilesystem",
+      message: `Saving to ${file_name}`,
+    });
     fs.writeFileSync(file_name, items);
+    logger.debug({
+      function: "SaveContentToFilesystem",
+      message: `Finished saving to ${file_name}`,
+    });
   } catch (e) {
     logger.error({
       function: "SaveContentToFilesystem",
