@@ -69,12 +69,12 @@ export async function BackupCosmosDBContainersToStorageAccountBlob(
   delimiter?: string
 ): Promise<void> {
   try {
+    const prefix_string = prefix === undefined ? "" : prefix;
+    const suffix_string = suffix === undefined ? "" : suffix;
+    const delimiter_string = delimiter === undefined ? "/" : delimiter;
+
     await Promise.all(
       cosmosdb_items.map((containers) => {
-        const prefix_string = prefix === undefined ? "" : prefix;
-        const suffix_string = suffix === undefined ? "" : suffix;
-        const delimiter_string = delimiter === undefined ? "/" : delimiter;
-
         const db_id = containers.db_id;
         const continer_id = containers.container_id;
         const blob_name = `${prefix_string}${db_id}${delimiter_string}${continer_id}${suffix_string}`;
@@ -104,12 +104,12 @@ export async function BackupCosmosDBContainersToFilesystem(
   delimiter?: string
 ): Promise<void> {
   try {
+    const prefix_string = prefix === undefined ? "" : prefix;
+    const suffix_string = suffix === undefined ? "" : suffix;
+    const delimiter_string = delimiter === undefined ? "/" : delimiter;
+
     await Promise.all(
       cosmosdb_items.map((containers) => {
-        const prefix_string = prefix === undefined ? "" : prefix;
-        const suffix_string = suffix === undefined ? "" : suffix;
-        const delimiter_string = delimiter === undefined ? "/" : delimiter;
-
         const db_id = containers.db_id;
         const continer_id = containers.container_id;
         const file_name = `${file_path}${prefix_string}${db_id}${delimiter_string}${continer_id}${suffix_string}`;

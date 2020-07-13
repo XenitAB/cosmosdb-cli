@@ -2,10 +2,10 @@ import fs from "fs-extra";
 import path from "path";
 import logger from "./logger";
 
-function CreateDirectoriesRecursive(filename: string): void {
+async function CreateDirectoriesRecursive(filename: string): Promise<void> {
   try {
     const directory = path.parse(filename).dir;
-    fs.ensureDirSync(directory);
+    await fs.ensureDir(directory);
   } catch (e) {
     logger.error({
       function: "CreateDirectoriesRecursive",
@@ -15,17 +15,17 @@ function CreateDirectoriesRecursive(filename: string): void {
   }
 }
 
-export function SaveContentToFilesystem(
+export async function SaveContentToFilesystem(
   items: string,
   file_name: string
-): void {
+): Promise<void> {
   try {
-    CreateDirectoriesRecursive(file_name);
+    await CreateDirectoriesRecursive(file_name);
     logger.debug({
       function: "SaveContentToFilesystem",
       message: `Saving to ${file_name}`,
     });
-    fs.writeFileSync(file_name, items);
+    await fs.writeFile(file_name, items);
     logger.debug({
       function: "SaveContentToFilesystem",
       message: `Finished saving to ${file_name}`,
