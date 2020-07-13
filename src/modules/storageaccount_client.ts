@@ -5,7 +5,7 @@ import {
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
 
-export function StorageAccountContainerClient(
+export function storage_account_container_client(
   account: string,
   container: string,
   key: string
@@ -19,7 +19,7 @@ export function StorageAccountContainerClient(
     return containerClient;
   } catch (e) {
     logger.error({
-      function: "StorageAccountContainerClient",
+      function: "storage_account_container_client",
       error: e,
     });
     process.exit(1);
@@ -42,7 +42,7 @@ export function StorageAccountBlockBlobClient(
   }
 }
 
-export async function UploadContentToStorageAccountContainer(
+export async function upload_content_to_storage_account_container(
   content: string,
   blob_name: string,
   container_client: ContainerClient
@@ -53,17 +53,17 @@ export async function UploadContentToStorageAccountContainer(
       blob_name
     );
     logger.debug({
-      function: "UploadContentToStorageAccountContainer",
+      function: "upload_content_to_storage_account_container",
       message: `Uploading up to ${blob_name}`,
     });
     await block_blob_client.upload(content, Buffer.byteLength(content));
     logger.debug({
-      function: "UploadContentToStorageAccountContainer",
+      function: "upload_content_to_storage_account_container",
       message: `Finished upload to ${blob_name}`,
     });
   } catch (e) {
     logger.error({
-      function: "UploadContentToStorageAccountContainer",
+      function: "upload_content_to_storage_account_container",
       error: e,
     });
     process.exit(1);

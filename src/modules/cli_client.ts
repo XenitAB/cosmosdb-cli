@@ -1,6 +1,6 @@
 import logger from "./logger";
 import commander, { CommanderStatic } from "commander";
-import { BackupClient } from "./backup_client";
+import { backup_client } from "./backup_client";
 
 export type cli_arguments = {
   cosmosdbAccountEndpoint?: string;
@@ -11,7 +11,7 @@ export type cli_arguments = {
   filesystemPath?: string;
 };
 
-function CLIClientBase(description: string): CommanderStatic {
+function cli_client_base(description: string): CommanderStatic {
   try {
     const cli = commander;
     cli.description(description);
@@ -19,14 +19,14 @@ function CLIClientBase(description: string): CommanderStatic {
     return cli;
   } catch (e) {
     logger.error({
-      function: "CLIClientBase",
+      function: "cli_client_base",
       error: e,
     });
     process.exit(1);
   }
 }
 
-function CLIClientBackupBase(): commander.Command {
+function cli_client_backup_base(): commander.Command {
   try {
     const cli = commander
       .command("backup <location>")
@@ -54,30 +54,30 @@ function CLIClientBackupBase(): commander.Command {
       .option("--cosmosdb-account-key <string>", "CosmosDB Account Key")
       .option("--filesystem-path <string>", "Path to store backup")
       .action(function (location, cmdObj) {
-        BackupClient(location, cmdObj);
+        backup_client(location, cmdObj);
       });
 
     return cli;
   } catch (e) {
     logger.error({
-      function: "CLIClientBackupBase",
+      function: "cli_client_backup_base",
       error: e,
     });
     process.exit(1);
   }
 }
 
-export function CLIClient(args: string[]): CommanderStatic {
+export function cli_client(args: string[]): CommanderStatic {
   try {
-    const cli = CLIClientBase("CosmosDB CLI Client")
-      .addCommand(CLIClientBackupBase())
+    const cli = cli_client_base("CosmosDB CLI Client")
+      .addCommand(cli_client_backup_base())
       .parse(args);
     if (!args.slice(2).length) commander.outputHelp();
 
     return cli;
   } catch (e) {
     logger.error({
-      function: "CLIClient",
+      function: "cli_client",
       error: e,
     });
     process.exit(1);

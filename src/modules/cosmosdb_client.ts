@@ -8,7 +8,7 @@ import {
   Resource,
 } from "@azure/cosmos";
 
-export function CosmosDBClient(endpoint: string, key: string): CosmosClient {
+export function cosmosdb_client(endpoint: string, key: string): CosmosClient {
   try {
     const client = new CosmosClient({
       endpoint: endpoint,
@@ -17,36 +17,36 @@ export function CosmosDBClient(endpoint: string, key: string): CosmosClient {
     return client;
   } catch (e) {
     logger.error({
-      function: "CosmosDBClient",
+      function: "cosmosdb_client",
       error: e,
     });
     process.exit(1);
   }
 }
 
-async function GetCosmosDBDatabases(
+async function get_comsosdb_databases(
   client: CosmosClient
 ): Promise<FeedResponse<DatabaseDefinition & Resource>> {
   try {
     return await client.databases.readAll().fetchAll();
   } catch (e) {
     logger.error({
-      function: "GetCosmosDBDatabases",
+      function: "get_comsosdb_databases",
       error: e,
     });
     process.exit(1);
   }
 }
 
-type CosmosDBContainersByDbType = {
+type cosmosdb_containers_by_db_type = {
   response: FeedResponse<ContainerDefinition & Resource>;
   db_id: string;
 };
 
-async function GetCosmosDBContainersByDb(
+async function get_cosmosdb_containers_by_db(
   client: CosmosClient,
   db_id: string
-): Promise<CosmosDBContainersByDbType> {
+): Promise<cosmosdb_containers_by_db_type> {
   try {
     return {
       response: await client.database(db_id).containers.readAll().fetchAll(),
@@ -54,24 +54,24 @@ async function GetCosmosDBContainersByDb(
     };
   } catch (e) {
     logger.error({
-      function: "GetCosmosDBContainersByDb",
+      function: "get_cosmosdb_containers_by_db",
       error: e,
     });
     process.exit(1);
   }
 }
 
-type CosmosDBContainerIDType = {
+type cosmosdb_container_id_type = {
   db_id: string;
   container_id: string;
 };
 
-type CosmosDBContainerIDsType = Array<CosmosDBContainerIDType>;
+type cosmosdb_container_ids_type = Array<cosmosdb_container_id_type>;
 
-function GetCosmosDBContainerIDs(
+function get_cosmosdb_container_ids(
   response: FeedResponse<ContainerDefinition & Resource>,
   db_id: string
-): CosmosDBContainerIDsType {
+): cosmosdb_container_ids_type {
   try {
     return response.resources.map((container) => {
       return {
@@ -81,24 +81,24 @@ function GetCosmosDBContainerIDs(
     });
   } catch (e) {
     logger.error({
-      function: "GetCosmosDBContainerIDs",
+      function: "get_cosmosdb_container_ids",
       error: e,
     });
     process.exit(1);
   }
 }
 
-type CosmosDBItemsByContainerAndDbType = {
+type cosmosdb_items_by_container_and_db_type = {
   response: FeedResponse<ItemDefinition>;
   db_id: string;
   container_id: string;
 };
 
-async function GetCosmosDBItemsByContainerAndDb(
+async function get_cosmosdb_itemsByContainerAndDb(
   client: CosmosClient,
   db_id: string,
   container_id: string
-): Promise<CosmosDBItemsByContainerAndDbType> {
+): Promise<cosmosdb_items_by_container_and_db_type> {
   try {
     return {
       response: await client
@@ -111,39 +111,42 @@ async function GetCosmosDBItemsByContainerAndDb(
     };
   } catch (e) {
     logger.error({
-      function: "GetCosmosDBItemsByContainerAndDb",
+      function: "get_cosmosdb_itemsByContainerAndDb",
       error: e,
     });
     process.exit(1);
   }
 }
 
-export type CosmosDBItemsType = Array<{
+export type cosmosdb_items_type = Array<{
   db_id: string;
   container_id: string;
   item_count: number;
   items: ItemDefinition[];
 }>;
 
-export async function GetCosmosDBItems(
+export async function get_cosmosdb_items(
   client: CosmosClient
-): Promise<CosmosDBItemsType> {
+): Promise<cosmosdb_items_type> {
   try {
-    const cosmosdb_databases = await GetCosmosDBDatabases(client);
+    const cosmosdb_databases = await get_comsosdb_databases(client);
     const cosmosdb_containers = await Promise.all(
       cosmosdb_databases.resources.map((db) => {
-        return GetCosmosDBContainersByDb(client, db.id);
+        return get_cosmosdb_containers_by_db(client, db.id);
       })
     );
     const container_items = await Promise.all(
       cosmosdb_containers
         .map((containers) => {
-          return GetCosmosDBContainerIDs(containers.response, containers.db_id);
+          return get_cosmosdb_container_ids(
+            containers.response,
+            containers.db_id
+          );
         })
         .map((containers) => {
           return Promise.all(
             containers.map((container) => {
-              return GetCosmosDBItemsByContainerAndDb(
+              return get_cosmosdb_itemsByContainerAndDb(
                 client,
                 container.db_id,
                 container.container_id
@@ -169,7 +172,7 @@ export async function GetCosmosDBItems(
     return items;
   } catch (e) {
     logger.error({
-      function: "GetCosmosDBItems",
+      function: "get_cosmosdb_items",
       error: e,
     });
     process.exit(1);

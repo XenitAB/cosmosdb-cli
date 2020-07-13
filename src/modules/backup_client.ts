@@ -1,31 +1,31 @@
 import logger from "./logger";
-import { CosmosDBItemsType } from "./cosmosdb_client";
-import { UploadContentToStorageAccountContainer } from "./storageaccount_client";
+import { cosmosdb_items_type } from "./cosmosdb_client";
+import { upload_content_to_storage_account_container } from "./storageaccount_client";
 import { ContainerClient } from "@azure/storage-blob";
-import { GetCosmosDBItems, CosmosDBClient } from "./cosmosdb_client";
-import { StorageAccountContainerClient } from "./storageaccount_client";
-import { config, GetConfigString } from "./config";
-import { SaveContentToFilesystem } from "./fs_client";
+import { get_cosmosdb_items, cosmosdb_client } from "./cosmosdb_client";
+import { storage_account_container_client } from "./storageaccount_client";
+import { config, get_config_string } from "./config";
+import { save_content_to_filesystem } from "./fs_client";
 import { cli_arguments } from "./cli_client";
 
-export async function BackupClient(
+export async function backup_client(
   location: string,
   cmdObj?: cli_arguments
 ): Promise<void> {
   try {
     switch (location) {
       case "azure-storage-account": {
-        const cosmosdb_client = CosmosDBClient(
-          GetConfigString(config.cosmosdb_account_endpoint, cmdObj),
-          GetConfigString(config.cosmosdb_account_key, cmdObj)
+        const client = cosmosdb_client(
+          get_config_string(config.cosmosdb_account_endpoint, cmdObj),
+          get_config_string(config.cosmosdb_account_key, cmdObj)
         );
-        const cosmosdb_items = await GetCosmosDBItems(cosmosdb_client);
-        const container_client = StorageAccountContainerClient(
-          GetConfigString(config.storage_account_name, cmdObj),
-          GetConfigString(config.storage_account_container, cmdObj),
-          GetConfigString(config.storage_account_key, cmdObj)
+        const cosmosdb_items = await get_cosmosdb_items(client);
+        const container_client = storage_account_container_client(
+          get_config_string(config.storage_account_name, cmdObj),
+          get_config_string(config.storage_account_container, cmdObj),
+          get_config_string(config.storage_account_key, cmdObj)
         );
-        await BackupCosmosDBContainersToStorageAccountBlob(
+        await backup_cosmosdb_containers_to_storage_account_blob(
           cosmosdb_items,
           container_client,
           `${Date.now().toString()}/`
@@ -33,21 +33,21 @@ export async function BackupClient(
         break;
       }
       case "file-system": {
-        const cosmosdb_client = CosmosDBClient(
-          GetConfigString(config.cosmosdb_account_endpoint, cmdObj),
-          GetConfigString(config.cosmosdb_account_key, cmdObj)
+        const client = cosmosdb_client(
+          get_config_string(config.cosmosdb_account_endpoint, cmdObj),
+          get_config_string(config.cosmosdb_account_key, cmdObj)
         );
-        const cosmosdb_items = await GetCosmosDBItems(cosmosdb_client);
-        await BackupCosmosDBContainersToFilesystem(
+        const cosmosdb_items = await get_cosmosdb_items(client);
+        await backup_cosmosdb_containers_to_filesystem(
           cosmosdb_items,
-          GetConfigString(config.filesystem_path, cmdObj),
+          get_config_string(config.filesystem_path, cmdObj),
           `${Date.now().toString()}/`
         );
         break;
       }
       default: {
         logger.error({
-          function: "BackupClient",
+          function: "backup_client",
           error: "No storage location defined.",
         });
         break;
@@ -55,15 +55,15 @@ export async function BackupClient(
     }
   } catch (e) {
     logger.error({
-      function: "BackupClient",
+      function: "backup_client",
       error: e,
     });
     process.exit(1);
   }
 }
 
-export async function BackupCosmosDBContainersToStorageAccountBlob(
-  cosmosdb_items: CosmosDBItemsType,
+export async function backup_cosmosdb_containers_to_storage_account_blob(
+  cosmosdb_items: cosmosdb_items_type,
   container_client: ContainerClient,
   prefix?: string,
   suffix?: string,
@@ -81,7 +81,7 @@ export async function BackupCosmosDBContainersToStorageAccountBlob(
         const blob_name = `${prefix_string}${db_id}${delimiter_string}${continer_id}${suffix_string}`;
         const items = JSON.stringify(containers.items);
 
-        UploadContentToStorageAccountContainer(
+        upload_content_to_storage_account_container(
           items,
           blob_name,
           container_client
@@ -90,15 +90,15 @@ export async function BackupCosmosDBContainersToStorageAccountBlob(
     );
   } catch (e) {
     logger.error({
-      function: "BackupCosmosDBContainersToStorageAccountBlob",
+      function: "backup_cosmosdb_containers_to_storage_account_blob",
       error: e,
     });
     process.exit(1);
   }
 }
 
-export async function BackupCosmosDBContainersToFilesystem(
-  cosmosdb_items: CosmosDBItemsType,
+export async function backup_cosmosdb_containers_to_filesystem(
+  cosmosdb_items: cosmosdb_items_type,
   file_path: string,
   prefix?: string,
   suffix?: string,
@@ -116,12 +116,12 @@ export async function BackupCosmosDBContainersToFilesystem(
         const file_name = `${file_path}${prefix_string}${db_id}${delimiter_string}${continer_id}${suffix_string}`;
         const items = JSON.stringify(containers.items);
 
-        SaveContentToFilesystem(items, file_name);
+        save_content_to_filesystem(items, file_name);
       })
     );
   } catch (e) {
     logger.error({
-      function: "BackupCosmosDBContainersToFilesystem",
+      function: "backup_cosmosdb_containers_to_filesystem",
       error: e,
     });
     process.exit(1);

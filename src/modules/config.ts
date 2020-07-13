@@ -1,8 +1,8 @@
 import logger from "./logger";
 import { cli_arguments } from "./cli_client";
 
-export function GetConfigString(
-  config_obj: ConfigType,
+export function get_config_string(
+  config_obj: config_type,
   cmd_obj?: cli_arguments
 ): string {
   try {
@@ -14,7 +14,7 @@ export function GetConfigString(
       return cmd_obj[config_obj.commander_parameter_name] || "";
     } else {
       logger.error({
-        function: "GetConfigString",
+        function: "get_config_string",
         message: "Configuration parameter is missing.",
         config_obj: config_obj,
         env: process.env[config_obj.environment_variable_name],
@@ -27,28 +27,28 @@ export function GetConfigString(
     }
   } catch (e) {
     logger.error({
-      function: "GetConfigString",
+      function: "get_config_string",
       error: e,
     });
     process.exit(1);
   }
 }
 
-type ConfigType = {
+type config_type = {
   environment_variable_name: string;
   commander_parameter_name: keyof cli_arguments;
 };
 
-export type ConfigTypes = {
-  cosmosdb_account_endpoint: ConfigType;
-  cosmosdb_account_key: ConfigType;
-  storage_account_name: ConfigType;
-  storage_account_container: ConfigType;
-  storage_account_key: ConfigType;
-  filesystem_path: ConfigType;
+export type config_types = {
+  cosmosdb_account_endpoint: config_type;
+  cosmosdb_account_key: config_type;
+  storage_account_name: config_type;
+  storage_account_container: config_type;
+  storage_account_key: config_type;
+  filesystem_path: config_type;
 };
 
-export const config: ConfigTypes = {
+export const config: config_types = {
   cosmosdb_account_endpoint: {
     environment_variable_name: "COSMOSDB_ACCOUNT_ENDPOINT",
     commander_parameter_name: "cosmosdbAccountEndpoint",

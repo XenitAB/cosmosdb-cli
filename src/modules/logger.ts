@@ -1,6 +1,6 @@
 import * as winston from "winston";
 
-function loggerFunction(): winston.Logger {
+function logger_function(): winston.Logger {
   try {
     return winston.createLogger({
       level: "debug", // Levels: error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5
@@ -18,6 +18,6 @@ function loggerFunction(): winston.Logger {
   }
 }
 
-const logger = loggerFunction();
+const logger = logger_function();
 
 export default logger;

@@ -3,7 +3,7 @@ import clear from "clear";
 import figlet from "figlet";
 import logger from "./logger";
 
-export function InitConsole(): void {
+export function init_console(): void {
   try {
     clear();
     console.log(
@@ -11,7 +11,7 @@ export function InitConsole(): void {
     );
   } catch (e) {
     logger.error({
-      function: "InitConsole",
+      function: "init_console",
       error: e,
     });
     process.exit(1);
