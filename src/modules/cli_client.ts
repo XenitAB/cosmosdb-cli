@@ -2,6 +2,15 @@ import logger from "./logger";
 import commander, { CommanderStatic } from "commander";
 import { BackupClient } from "./backup_client";
 
+export type cli_arguments = {
+  cosmosdbAccountEndpoint?: string;
+  cosmosdbAccountKey?: string;
+  storageAccountName?: string;
+  storageAccountContainer?: string;
+  storageAccountKey?: string;
+  filesystemPath?: string;
+};
+
 function CLIClientBase(description: string): CommanderStatic {
   try {
     const cli = commander;

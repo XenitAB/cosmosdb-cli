@@ -6,10 +6,11 @@ import { GetCosmosDBItems, CosmosDBClient } from "./cosmosdb_client";
 import { StorageAccountContainerClient } from "./storageaccount_client";
 import { config, GetConfigString } from "./config";
 import { SaveContentToFilesystem } from "./fs_client";
+import { cli_arguments } from "./cli_client";
 
 export async function BackupClient(
   location: string,
-  cmdObj?: any
+  cmdObj?: cli_arguments
 ): Promise<void> {
   try {
     switch (location) {

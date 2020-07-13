@@ -1,12 +1,16 @@
 import logger from "./logger";
+import { cli_arguments } from "./cli_client";
 
-export function GetConfigString(config_obj: ConfigType, cmd_obj?: any): string {
+export function GetConfigString(
+  config_obj: ConfigType,
+  cmd_obj?: cli_arguments
+): string {
   try {
     if (process.env[config_obj.environment_variable_name]) {
       return (
         process.env[config_obj.environment_variable_name]?.toString() || ""
       );
-    } else if (cmd_obj[config_obj.commander_parameter_name]) {
+    } else if (cmd_obj && cmd_obj[config_obj.commander_parameter_name]) {
       return cmd_obj[config_obj.commander_parameter_name] || "";
     } else {
       logger.error({
@@ -14,7 +18,10 @@ export function GetConfigString(config_obj: ConfigType, cmd_obj?: any): string {
         message: "Configuration parameter is missing.",
         config_obj: config_obj,
         env: process.env[config_obj.environment_variable_name],
-        cmd: cmd_obj[config_obj.commander_parameter_name],
+        cmd:
+          cmd_obj && cmd_obj[config_obj.commander_parameter_name]
+            ? cmd_obj[config_obj.commander_parameter_name]
+            : "",
       });
       process.exit(1);
     }
@@ -29,10 +36,10 @@ export function GetConfigString(config_obj: ConfigType, cmd_obj?: any): string {
 
 type ConfigType = {
   environment_variable_name: string;
-  commander_parameter_name: string;
+  commander_parameter_name: keyof cli_arguments;
 };
 
-type ConfigTypes = {
+export type ConfigTypes = {
   cosmosdb_account_endpoint: ConfigType;
   cosmosdb_account_key: ConfigType;
   storage_account_name: ConfigType;
