@@ -16,7 +16,10 @@ export function CosmosDBClient(endpoint: string, key: string): CosmosClient {
     });
     return client;
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "CosmosDBClient",
+      error: e,
+    });
     process.exit(1);
   }
 }
@@ -27,7 +30,10 @@ async function GetCosmosDBDatabases(
   try {
     return await client.databases.readAll().fetchAll();
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "GetCosmosDBDatabases",
+      error: e,
+    });
     process.exit(1);
   }
 }
@@ -47,7 +53,10 @@ async function GetCosmosDBContainersByDb(
       db_id: db_id,
     };
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "GetCosmosDBContainersByDb",
+      error: e,
+    });
     process.exit(1);
   }
 }
@@ -71,7 +80,10 @@ function GetCosmosDBContainerIDs(
       };
     });
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "GetCosmosDBContainerIDs",
+      error: e,
+    });
     process.exit(1);
   }
 }
@@ -98,7 +110,10 @@ async function GetCosmosDBItemsByContainerAndDb(
       container_id: container_id,
     };
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "GetCosmosDBItemsByContainerAndDb",
+      error: e,
+    });
     process.exit(1);
   }
 }
@@ -153,7 +168,10 @@ export async function GetCosmosDBItems(
 
     return items;
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "GetCosmosDBItems",
+      error: e,
+    });
     process.exit(1);
   }
 }

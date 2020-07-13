@@ -18,7 +18,10 @@ export function StorageAccountContainerClient(
     );
     return containerClient;
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "StorageAccountContainerClient",
+      error: e,
+    });
     process.exit(1);
   }
 }
@@ -31,7 +34,10 @@ export function StorageAccountBlockBlobClient(
     const blockBlobClient = container_client.getBlockBlobClient(blob_name);
     return blockBlobClient;
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "StorageAccountBlockBlobClient",
+      error: e,
+    });
     process.exit(1);
   }
 }
@@ -50,7 +56,10 @@ export async function UploadContentToStorageAccountContainer(
     await block_blob_client.upload(content, Buffer.byteLength(content));
     logger.debug(`Finished backup to ${blob_name}`);
   } catch (e) {
-    logger.error(e);
+    logger.error({
+      function: "UploadContentToStorageAccountContainer",
+      error: e,
+    });
     process.exit(1);
   }
 }

@@ -38,6 +38,7 @@ type ConfigTypes = {
   storage_account_name: ConfigType;
   storage_account_container: ConfigType;
   storage_account_key: ConfigType;
+  filesystem_path: ConfigType;
 };
 
 export const config: ConfigTypes = {
@@ -60,5 +61,9 @@ export const config: ConfigTypes = {
   storage_account_key: {
     environment_variable_name: "STORAGE_ACCOUNT_KEY",
     commander_parameter_name: "storageAccountKey",
+  },
+  filesystem_path: {
+    environment_variable_name: "FILESYSTEM_PATH",
+    commander_parameter_name: "filesystemPath",
   },
 };

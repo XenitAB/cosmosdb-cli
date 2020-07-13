@@ -1,8 +1,8 @@
-import { init_console } from "./modules/init_console";
+import { InitConsole } from "./modules/init_console";
 import { CLIClient } from "./modules/cli_client";
 
 async function main() {
-  init_console();
+  InitConsole();
   CLIClient(process.argv);
 }
 

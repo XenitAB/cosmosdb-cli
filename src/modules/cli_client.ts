@@ -21,6 +21,9 @@ function CLIClientBackupBase(): commander.Command {
   try {
     const cli = commander
       .command("backup <location>")
+      .description("Backup CosmosDB to location")
+      .option("")
+      .option("azure-storage-account", "Backup to Azure Storage Account")
       .option(
         "--cosmosdb-account-endpoint <string>",
         "CosmosDB Account Endpoint"
@@ -32,6 +35,15 @@ function CLIClientBackupBase(): commander.Command {
         "Storage Account Container"
       )
       .option("--storage-account-key <string>", "Storage Account Key")
+      .option("")
+      .option("file-system", "Backup to file system")
+      .option("azure-storage-account", "Backup to Azure Storage Account")
+      .option(
+        "--cosmosdb-account-endpoint <string>",
+        "CosmosDB Account Endpoint"
+      )
+      .option("--cosmosdb-account-key <string>", "CosmosDB Account Key")
+      .option("--filesystem-path <string>", "Path to store backup")
       .action(function (location, cmdObj) {
         BackupClient(location, cmdObj);
       });
