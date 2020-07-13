@@ -1,6 +1,7 @@
 import logger from "./logger";
 import commander, { CommanderStatic } from "commander";
 import { backup_client } from "./backup_client";
+import { init_console } from "./init_console";
 
 export type cli_arguments = {
   cosmosdbAccountEndpoint?: string;
@@ -9,26 +10,19 @@ export type cli_arguments = {
   storageAccountContainer?: string;
   storageAccountKey?: string;
   filesystemPath?: string;
+  banner?: boolean;
 };
 
-function cli_client_base(description: string): CommanderStatic {
+export function cli_client(args: string[]): CommanderStatic {
   try {
-    const cli = commander;
-    cli.description(description);
+    init_console(args);
 
-    return cli;
-  } catch (e) {
-    logger.error({
-      function: "cli_client_base",
-      error: e,
-    });
-    process.exit(1);
-  }
-}
+    const cli = commander.description("CosmosDB CLI Client");
 
-function cli_client_backup_base(): commander.Command {
-  try {
-    const cli = commander
+    cli.option("--no-banner", "Remove banner from CLI output");
+
+    // cosmosdb-cli backup
+    cli
       .command("backup <location>")
       .description("Backup CosmosDB to location")
       .option("")
@@ -57,21 +51,8 @@ function cli_client_backup_base(): commander.Command {
         backup_client(location, cmdObj);
       });
 
-    return cli;
-  } catch (e) {
-    logger.error({
-      function: "cli_client_backup_base",
-      error: e,
-    });
-    process.exit(1);
-  }
-}
+    cli.parse(args);
 
-export function cli_client(args: string[]): CommanderStatic {
-  try {
-    const cli = cli_client_base("CosmosDB CLI Client")
-      .addCommand(cli_client_backup_base())
-      .parse(args);
     if (!args.slice(2).length) commander.outputHelp();
 
     return cli;
