@@ -1,29 +1,23 @@
 import logger from "./logger";
-import { cosmosdb_items_type } from "./cosmosdb_client";
-import { upload_content_to_storage_account_container } from "./storageaccount_client";
+import * as Cosmosdb_client from "./cosmosdb_client";
+import * as Storageaccount_client from "./storageaccount_client";
+import * as Config from "./config";
+import * as Fs_client from "./fs_client";
 import { ContainerClient } from "@azure/storage-blob";
-import { get_cosmosdb_items, cosmosdb_client } from "./cosmosdb_client";
-import { storage_account_container_client } from "./storageaccount_client";
-import { config, get_config_string } from "./config";
-import { save_content_to_filesystem } from "./fs_client";
-import { cli_arguments } from "./cli_client";
 
-export async function backup_client(
-  location: string,
-  cmdObj?: cli_arguments
-): Promise<void> {
+export async function client(config: Config.t): Promise<void> {
   try {
-    switch (location) {
+    switch (config.type) {
       case "azure-storage-account": {
-        const client = cosmosdb_client(
-          get_config_string(config.cosmosdb_account_endpoint, cmdObj),
-          get_config_string(config.cosmosdb_account_key, cmdObj)
+        const client = Cosmosdb_client.client(
+          config.cosmosdb_account_endpoint,
+          config.cosmosdb_account_key
         );
-        const cosmosdb_items = await get_cosmosdb_items(client);
-        const container_client = storage_account_container_client(
-          get_config_string(config.storage_account_name, cmdObj),
-          get_config_string(config.storage_account_container, cmdObj),
-          get_config_string(config.storage_account_key, cmdObj)
+        const cosmosdb_items = await Cosmosdb_client.get_items(client);
+        const container_client = Storageaccount_client.container_client(
+          config.storage_account_name,
+          config.storage_account_container,
+          config.storage_account_key
         );
         await backup_cosmosdb_containers_to_storage_account_blob(
           cosmosdb_items,
@@ -33,14 +27,14 @@ export async function backup_client(
         break;
       }
       case "filesystem": {
-        const client = cosmosdb_client(
-          get_config_string(config.cosmosdb_account_endpoint, cmdObj),
-          get_config_string(config.cosmosdb_account_key, cmdObj)
+        const client = Cosmosdb_client.client(
+          config.cosmosdb_account_endpoint,
+          config.cosmosdb_account_key
         );
-        const cosmosdb_items = await get_cosmosdb_items(client);
+        const cosmosdb_items = await Cosmosdb_client.get_items(client);
         await backup_cosmosdb_containers_to_filesystem(
           cosmosdb_items,
-          get_config_string(config.filesystem_path, cmdObj),
+          config.filesystem_path,
           `${Date.now().toString()}/`
         );
         break;
@@ -55,15 +49,15 @@ export async function backup_client(
     }
   } catch (e) {
     logger.error({
-      function: "backup_client",
+      function: "Backup_client.backup_client",
       error: e,
     });
     process.exit(1);
   }
 }
 
-export async function backup_cosmosdb_containers_to_storage_account_blob(
-  cosmosdb_items: cosmosdb_items_type,
+async function backup_cosmosdb_containers_to_storage_account_blob(
+  cosmosdb_items: Cosmosdb_client.items,
   container_client: ContainerClient,
   prefix?: string,
   suffix?: string,
@@ -81,24 +75,21 @@ export async function backup_cosmosdb_containers_to_storage_account_blob(
         const blob_name = `${prefix_string}${db_id}${delimiter_string}${continer_id}${suffix_string}`;
         const items = JSON.stringify(containers.items);
 
-        upload_content_to_storage_account_container(
-          items,
-          blob_name,
-          container_client
-        );
+        Storageaccount_client.save_content(items, blob_name, container_client);
       })
     );
   } catch (e) {
     logger.error({
-      function: "backup_cosmosdb_containers_to_storage_account_blob",
+      function:
+        "Backup_client.backup_cosmosdb_containers_to_storage_account_blob",
       error: e,
     });
     process.exit(1);
   }
 }
 
-export async function backup_cosmosdb_containers_to_filesystem(
-  cosmosdb_items: cosmosdb_items_type,
+async function backup_cosmosdb_containers_to_filesystem(
+  cosmosdb_items: Cosmosdb_client.items,
   file_path: string,
   prefix?: string,
   suffix?: string,
@@ -116,12 +107,12 @@ export async function backup_cosmosdb_containers_to_filesystem(
         const file_name = `${file_path}${prefix_string}${db_id}${delimiter_string}${continer_id}${suffix_string}`;
         const items = JSON.stringify(containers.items);
 
-        save_content_to_filesystem(items, file_name);
+        Fs_client.save_item(items, file_name);
       })
     );
   } catch (e) {
     logger.error({
-      function: "backup_cosmosdb_containers_to_filesystem",
+      function: "Backup_client.backup_cosmosdb_containers_to_filesystem",
       error: e,
     });
     process.exit(1);

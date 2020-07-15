@@ -1,7 +1,7 @@
-import { cli_client } from "./modules/cli_client";
+import * as Cli_client from "./modules/cli_client";
 
 async function main() {
-  cli_client(process.argv);
+  Cli_client.client(process.argv);
 }
 
 main().catch((error) => {

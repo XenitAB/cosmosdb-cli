@@ -1,22 +1,71 @@
 import logger from "./logger";
-import commander, { CommanderStatic } from "commander";
-import { backup_client } from "./backup_client";
-import { init_console } from "./init_console";
+import commander, { CommanderStatic } from "commander"; // Question: Should these be imported using import * as Commander from "commander"; ?
+import * as Backup_client from "./backup_client";
+import * as Config from "./config";
 
-export type cli_arguments = {
-  cosmosdbAccountEndpoint?: string;
-  cosmosdbAccountKey?: string;
-  storageAccountName?: string;
-  storageAccountContainer?: string;
-  storageAccountKey?: string;
-  filesystemPath?: string;
-  banner?: boolean;
+type cosmosdb = {
+  cosmosdbAccountEndpoint?: Config.cosmosdb["cosmosdb_account_endpoint"];
+  cosmosdbAccountKey?: Config.cosmosdb["cosmosdb_account_key"];
 };
 
-export function cli_client(args: string[]): CommanderStatic {
-  try {
-    init_console(args);
+type azure_storage_account = {
+  type: "azure-storage-account";
+  storageAccountName?: Config.azure_storage_account["storage_account_name"];
+  storageAccountContainer?: Config.azure_storage_account["storage_account_container"];
+  storageAccountKey?: Config.azure_storage_account["storage_account_key"];
+} & cosmosdb;
 
+type filesystem = {
+  type: "filesystem";
+  filesystemPath?: Config.filesystem["filesystem_path"];
+} & cosmosdb;
+
+type t = azure_storage_account | filesystem;
+
+function to_config(args: t): Config.t {
+  try {
+    const cosmosdb = {
+      cosmosdb_account_endpoint: args.cosmosdbAccountEndpoint,
+      cosmosdb_account_key: args.cosmosdbAccountKey,
+    };
+
+    switch (args.type) {
+      case "azure-storage-account":
+        const azure_storage_account = {
+          storage_account_name: args.storageAccountName,
+          storage_account_container: args.storageAccountContainer,
+          storage_account_key: args.storageAccountKey,
+        };
+        return Config.from_partial({
+          ...cosmosdb,
+          ...azure_storage_account,
+          type: args.type,
+        });
+      case "filesystem":
+        const filesystem_path = args.filesystemPath;
+        return Config.from_partial({
+          ...cosmosdb,
+          filesystem_path,
+          type: args.type,
+        });
+      default:
+        logger.error({
+          function: "Cli_client.to_config",
+          error: "No known type defined.",
+        });
+        process.exit(1);
+    }
+  } catch (e) {
+    logger.error({
+      function: "Cli_client.to_config",
+      error: e,
+    });
+    process.exit(1);
+  }
+}
+
+export function client(args: string[]): CommanderStatic {
+  try {
     const cli = commander.description("CosmosDB CLI Client");
 
     cli.option("--no-banner", "Remove banner from CLI output");
@@ -47,8 +96,11 @@ export function cli_client(args: string[]): CommanderStatic {
       )
       .option("--cosmosdb-account-key <string>", "CosmosDB Account Key")
       .option("--filesystem-path <string>", "Path to store backup")
-      .action(function (location, cmdObj) {
-        backup_client(location, cmdObj);
+      .action(function (
+        location: "azure-storage-account" | "filesystem",
+        cmd_obj: t
+      ) {
+        Backup_client.client(to_config({ ...cmd_obj, type: location }));
       });
 
     cli.parse(args);
@@ -58,7 +110,7 @@ export function cli_client(args: string[]): CommanderStatic {
     return cli;
   } catch (e) {
     logger.error({
-      function: "cli_client",
+      function: "Cli_client.client",
       error: e,
     });
     process.exit(1);
