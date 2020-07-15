@@ -80,7 +80,7 @@ const backup_cosmosdb_containers_to_storage_account_blob = async (
     );
   } catch (e) {
     logger.error({
-      function:
+      module:
         "Backup_client.backup_cosmosdb_containers_to_storage_account_blob",
       error: e,
     });
