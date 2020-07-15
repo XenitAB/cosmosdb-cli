@@ -1,6 +1,6 @@
 import logger from "./Logger";
 import commander, { CommanderStatic } from "commander"; // Question: Should these be imported using import * as Commander from "commander"; ?
-import * as Backup_client from "./Backup_client";
+import * as Backup_client from "./Backup_client.ts_bak";
 import * as Config from "./Config";
 
 type cosmosdb = {
