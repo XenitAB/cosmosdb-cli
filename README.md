@@ -47,18 +47,3 @@ export COSMOSDB_CLI_FILESYSTEM_PATH="/tmp/"
 
 cosmosdb-cli backup filesystem
 ```
-
-## Disable Banner
-
-### Disable Banner Using Command Line Parameters
-
-```shell
-cosmosdb-cli --no-banner [...]
-```
-
-### Disable Banner Using Environment Variables
-
-```shell
-export COSMOSDB_CLI_BANNER="false"
-cosmosdb-cli [...]
-```
