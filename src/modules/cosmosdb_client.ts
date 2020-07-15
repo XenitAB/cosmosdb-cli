@@ -8,7 +8,7 @@ import {
   Resource,
 } from "@azure/cosmos";
 
-export function client(endpoint: string, key: string): CosmosClient {
+export const client = (endpoint: string, key: string): CosmosClient => {
   try {
     const cosmosdb_client = new CosmosClient({
       endpoint: endpoint,
@@ -22,11 +22,11 @@ export function client(endpoint: string, key: string): CosmosClient {
     });
     process.exit(1);
   }
-}
+};
 
-async function get_databases(
+const get_databases = async (
   client: CosmosClient
-): Promise<FeedResponse<DatabaseDefinition & Resource>> {
+): Promise<FeedResponse<DatabaseDefinition & Resource>> => {
   try {
     return await client.databases.readAll().fetchAll();
   } catch (e) {
@@ -36,17 +36,17 @@ async function get_databases(
     });
     process.exit(1);
   }
-}
+};
 
 type container_by_db = {
   response: FeedResponse<ContainerDefinition & Resource>;
   db_id: string;
 };
 
-async function get_containers_by_db(
+const get_containers_by_db = async (
   client: CosmosClient,
   db_id: string
-): Promise<container_by_db> {
+): Promise<container_by_db> => {
   try {
     return {
       response: await client.database(db_id).containers.readAll().fetchAll(),
@@ -59,7 +59,7 @@ async function get_containers_by_db(
     });
     process.exit(1);
   }
-}
+};
 
 type container_id = {
   db_id: string;
@@ -68,10 +68,10 @@ type container_id = {
 
 type container_ids = Array<container_id>;
 
-function get_container_ids(
+const get_container_ids = (
   response: FeedResponse<ContainerDefinition & Resource>,
   db_id: string
-): container_ids {
+): container_ids => {
   try {
     return response.resources.map((container) => {
       return {
@@ -86,7 +86,7 @@ function get_container_ids(
     });
     process.exit(1);
   }
-}
+};
 
 type items_by_container_and_db = {
   response: FeedResponse<ItemDefinition>;
@@ -94,11 +94,11 @@ type items_by_container_and_db = {
   container_id: string;
 };
 
-async function get_items_by_container_and_db(
+const get_items_by_container_and_db = async (
   client: CosmosClient,
   db_id: string,
   container_id: string
-): Promise<items_by_container_and_db> {
+): Promise<items_by_container_and_db> => {
   try {
     return {
       response: await client
@@ -116,7 +116,7 @@ async function get_items_by_container_and_db(
     });
     process.exit(1);
   }
-}
+};
 
 export type items = Array<{
   db_id: string;
@@ -125,7 +125,7 @@ export type items = Array<{
   items: ItemDefinition[];
 }>;
 
-export async function get_items(client: CosmosClient): Promise<items> {
+export const get_items = async (client: CosmosClient): Promise<items> => {
   try {
     const cosmosdb_databases = await get_databases(client);
     const cosmosdb_containers = await Promise.all(
@@ -172,4 +172,4 @@ export async function get_items(client: CosmosClient): Promise<items> {
     });
     process.exit(1);
   }
-}
+};

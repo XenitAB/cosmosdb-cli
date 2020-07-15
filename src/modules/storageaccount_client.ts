@@ -5,11 +5,11 @@ import {
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
 
-export function container_client(
+export const container_client = (
   account: string,
   container: string,
   key: string
-): ContainerClient {
+): ContainerClient => {
   try {
     const sharedKeyCredential = new StorageSharedKeyCredential(account, key);
     const containerClient = new ContainerClient(
@@ -24,12 +24,12 @@ export function container_client(
     });
     process.exit(1);
   }
-}
+};
 
-function block_blob_client(
+const block_blob_client = (
   container_client: ContainerClient,
   blob_name: string
-): BlockBlobClient {
+): BlockBlobClient => {
   try {
     const blockBlobClient = container_client.getBlockBlobClient(blob_name);
     return blockBlobClient;
@@ -40,13 +40,13 @@ function block_blob_client(
     });
     process.exit(1);
   }
-}
+};
 
-export async function save_content(
+export const save_content = async (
   content: string,
   blob_name: string,
   container_client: ContainerClient
-): Promise<void> {
+): Promise<void> => {
   try {
     const client = block_blob_client(container_client, blob_name);
     logger.debug({
@@ -65,4 +65,4 @@ export async function save_content(
     });
     process.exit(1);
   }
-}
+};

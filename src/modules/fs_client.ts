@@ -2,7 +2,9 @@ import fs from "fs-extra";
 import path from "path";
 import logger from "./logger";
 
-async function create_directories_recursive(filename: string): Promise<void> {
+const create_directories_recursive = async (
+  filename: string
+): Promise<void> => {
   try {
     const directory = path.parse(filename).dir;
     await fs.ensureDir(directory);
@@ -13,12 +15,12 @@ async function create_directories_recursive(filename: string): Promise<void> {
     });
     process.exit(1);
   }
-}
+};
 
-export async function save_item(
+export const save_item = async (
   items: string,
   file_name: string
-): Promise<void> {
+): Promise<void> => {
   try {
     await create_directories_recursive(file_name);
     logger.debug({
@@ -37,4 +39,4 @@ export async function save_item(
     });
     process.exit(1);
   }
-}
+};

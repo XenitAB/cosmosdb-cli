@@ -22,7 +22,7 @@ type filesystem = {
 
 type t = azure_storage_account | filesystem;
 
-function to_config(args: t): Config.t {
+const to_config = (args: t): Config.t => {
   try {
     const cosmosdb = {
       cosmosdb_account_endpoint: args.cosmosdbAccountEndpoint,
@@ -62,9 +62,9 @@ function to_config(args: t): Config.t {
     });
     process.exit(1);
   }
-}
+};
 
-export function client(args: string[]): CommanderStatic {
+export const client = (args: string[]): CommanderStatic => {
   try {
     const cli = commander.description("CosmosDB CLI Client");
 
@@ -115,4 +115,4 @@ export function client(args: string[]): CommanderStatic {
     });
     process.exit(1);
   }
-}
+};

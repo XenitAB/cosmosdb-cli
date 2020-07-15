@@ -34,7 +34,7 @@ const default_filesystem: Partial<filesystem> = {
   filesystem_path: process.env.COSMOSDB_CLI_FILESYSTEM_PATH,
 };
 
-function is_valid(partial_config: Partial<t> | t): partial_config is t {
+const is_valid = (partial_config: Partial<t> | t): partial_config is t => {
   try {
     if (
       partial_config.cosmosdb_account_endpoint == null ||
@@ -65,9 +65,9 @@ function is_valid(partial_config: Partial<t> | t): partial_config is t {
     });
     process.exit(1);
   }
-}
+};
 
-function valid_or_exit(config: Partial<t>): t {
+const valid_or_exit = (config: Partial<t>): t => {
   try {
     if (is_valid(config)) {
       return config;
@@ -86,7 +86,7 @@ function valid_or_exit(config: Partial<t>): t {
     });
     process.exit(1);
   }
-}
+};
 
 const filter_undefined = <T>(t: Partial<T>): Partial<T> => {
   try {
@@ -104,7 +104,7 @@ const filter_undefined = <T>(t: Partial<T>): Partial<T> => {
   }
 };
 
-export function from_partial(partial_config: Partial<t>): t {
+export const from_partial = (partial_config: Partial<t>): t => {
   try {
     const filtered_partial_config = filter_undefined<Partial<t>>(
       partial_config
@@ -136,4 +136,4 @@ export function from_partial(partial_config: Partial<t>): t {
     });
     process.exit(1);
   }
-}
+};

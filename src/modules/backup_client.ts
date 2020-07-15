@@ -5,7 +5,7 @@ import * as Config from "./config";
 import * as Fs_client from "./fs_client";
 import { ContainerClient } from "@azure/storage-blob";
 
-export async function client(config: Config.t): Promise<void> {
+export const client = async (config: Config.t): Promise<void> => {
   try {
     switch (config.type) {
       case "azure-storage-account": {
@@ -54,15 +54,15 @@ export async function client(config: Config.t): Promise<void> {
     });
     process.exit(1);
   }
-}
+};
 
-async function backup_cosmosdb_containers_to_storage_account_blob(
+const backup_cosmosdb_containers_to_storage_account_blob = async (
   cosmosdb_items: Cosmosdb_client.items,
   container_client: ContainerClient,
   prefix?: string,
   suffix?: string,
   delimiter?: string
-): Promise<void> {
+): Promise<void> => {
   try {
     const prefix_string = prefix === undefined ? "" : prefix;
     const suffix_string = suffix === undefined ? "" : suffix;
@@ -86,15 +86,15 @@ async function backup_cosmosdb_containers_to_storage_account_blob(
     });
     process.exit(1);
   }
-}
+};
 
-async function backup_cosmosdb_containers_to_filesystem(
+const backup_cosmosdb_containers_to_filesystem = async (
   cosmosdb_items: Cosmosdb_client.items,
   file_path: string,
   prefix?: string,
   suffix?: string,
   delimiter?: string
-): Promise<void> {
+): Promise<void> => {
   try {
     const prefix_string = prefix === undefined ? "" : prefix;
     const suffix_string = suffix === undefined ? "" : suffix;
@@ -117,4 +117,4 @@ async function backup_cosmosdb_containers_to_filesystem(
     });
     process.exit(1);
   }
-}
+};
