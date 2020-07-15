@@ -88,15 +88,13 @@ function valid_or_exit(config: Partial<t>): t {
   }
 }
 
-// Question: Am I cheating with types here?
-function filter_undefined(partial_config: Partial<t>): Partial<t> {
+const filter_undefined = <T>(t: Partial<T>): Partial<T> => {
   try {
-    const filtered_partial_config = Object.entries(partial_config)
-      .filter((entry) => entry[1] !== undefined)
-      .reduce((object, entry) => {
-        return { ...object, [entry[0]]: entry[1] };
+    return Object.entries(t)
+      .filter(([_key, value]) => value !== undefined)
+      .reduce((acc: Partial<T>, [key, value]) => {
+        return { ...acc, [key]: value };
       }, {});
-    return filtered_partial_config as Partial<t>;
   } catch (e) {
     logger.error({
       function: "Config.filter_undefined",
@@ -104,11 +102,13 @@ function filter_undefined(partial_config: Partial<t>): Partial<t> {
     });
     process.exit(1);
   }
-}
+};
 
 export function from_partial(partial_config: Partial<t>): t {
   try {
-    const filtered_partial_config = filter_undefined(partial_config);
+    const filtered_partial_config = filter_undefined<Partial<t>>(
+      partial_config
+    );
     if (is_valid(filtered_partial_config)) {
       return filtered_partial_config;
     }
