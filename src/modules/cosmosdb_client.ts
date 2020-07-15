@@ -17,7 +17,7 @@ export const client = (endpoint: string, key: string): CosmosClient => {
     return cosmosdb_client;
   } catch (e) {
     logger.error({
-      function: "Cosmosdb_client.client",
+      module: "Cosmosdb_client.client",
       error: e,
     });
     process.exit(1);
@@ -31,7 +31,7 @@ const get_databases = async (
     return await client.databases.readAll().fetchAll();
   } catch (e) {
     logger.error({
-      function: "Cosmosdb_client.get_databases",
+      module: "Cosmosdb_client.get_databases",
       error: e,
     });
     process.exit(1);
@@ -54,7 +54,7 @@ const get_containers_by_db = async (
     };
   } catch (e) {
     logger.error({
-      function: "Cosmosdb_client.get_containers_by_db",
+      module: "Cosmosdb_client.get_containers_by_db",
       error: e,
     });
     process.exit(1);
@@ -81,7 +81,7 @@ const get_container_ids = (
     });
   } catch (e) {
     logger.error({
-      function: "Cosmosdb_client.get_container_ids",
+      module: "Cosmosdb_client.get_container_ids",
       error: e,
     });
     process.exit(1);
@@ -111,7 +111,7 @@ const get_items_by_container_and_db = async (
     };
   } catch (e) {
     logger.error({
-      function: "Cosmosdb_client.get_items_by_container_and_db",
+      module: "Cosmosdb_client.get_items_by_container_and_db",
       error: e,
     });
     process.exit(1);
@@ -167,7 +167,7 @@ export const get_items = async (client: CosmosClient): Promise<items> => {
     return items;
   } catch (e) {
     logger.error({
-      function: "Cosmosdb_client.get_items",
+      module: "Cosmosdb_client.get_items",
       error: e,
     });
     process.exit(1);

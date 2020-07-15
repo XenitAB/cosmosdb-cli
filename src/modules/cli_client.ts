@@ -50,14 +50,14 @@ const to_config = (args: t): Config.t => {
         });
       default:
         logger.error({
-          function: "Cli_client.to_config",
+          module: "Cli_client.to_config",
           error: "No known type defined.",
         });
         process.exit(1);
     }
   } catch (e) {
     logger.error({
-      function: "Cli_client.to_config",
+      module: "Cli_client.to_config",
       error: e,
     });
     process.exit(1);
@@ -110,7 +110,7 @@ export const client = (args: string[]): CommanderStatic => {
     return cli;
   } catch (e) {
     logger.error({
-      function: "Cli_client.client",
+      module: "Cli_client.client",
       error: e,
     });
     process.exit(1);

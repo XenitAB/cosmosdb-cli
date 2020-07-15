@@ -60,7 +60,7 @@ const is_valid = (partial_config: Partial<t> | t): partial_config is t => {
     return false;
   } catch (e) {
     logger.error({
-      function: "Config.is_valid",
+      module: "Config.is_valid",
       error: e,
     });
     process.exit(1);
@@ -73,7 +73,7 @@ const valid_or_exit = (config: Partial<t>): t => {
       return config;
     } else {
       logger.error({
-        function: "Config.valid_or_exit",
+        module: "Config.valid_or_exit",
         error: "Config not valid.",
         config: config,
       });
@@ -81,7 +81,7 @@ const valid_or_exit = (config: Partial<t>): t => {
     }
   } catch (e) {
     logger.error({
-      function: "Config.valid_or_exit",
+      module: "Config.valid_or_exit",
       error: e,
     });
     process.exit(1);
@@ -97,7 +97,7 @@ const filter_undefined = <T>(t: Partial<T>): Partial<T> => {
       }, {});
   } catch (e) {
     logger.error({
-      function: "Config.filter_undefined",
+      module: "Config.filter_undefined",
       error: e,
     });
     process.exit(1);
@@ -131,7 +131,7 @@ export const from_partial = (partial_config: Partial<t>): t => {
     }
   } catch (e) {
     logger.error({
-      function: "Config.from_partial",
+      module: "Config.from_partial",
       error: e,
     });
     process.exit(1);

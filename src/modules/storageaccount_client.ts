@@ -19,7 +19,7 @@ export const container_client = (
     return containerClient;
   } catch (e) {
     logger.error({
-      function: "Storageaccount_client.container_client",
+      module: "Storageaccount_client.container_client",
       error: e,
     });
     process.exit(1);
@@ -35,7 +35,7 @@ const block_blob_client = (
     return blockBlobClient;
   } catch (e) {
     logger.error({
-      function: "Storageaccount_client.block_blob_client",
+      module: "Storageaccount_client.block_blob_client",
       error: e,
     });
     process.exit(1);
@@ -50,17 +50,17 @@ export const save_content = async (
   try {
     const client = block_blob_client(container_client, blob_name);
     logger.debug({
-      function: "Storageaccount_client.save_content",
+      module: "Storageaccount_client.save_content",
       message: `Uploading up to ${blob_name}`,
     });
     await client.upload(content, Buffer.byteLength(content));
     logger.debug({
-      function: "Storageaccount_client.save_content",
+      module: "Storageaccount_client.save_content",
       message: `Finished upload to ${blob_name}`,
     });
   } catch (e) {
     logger.error({
-      function: "Storageaccount_client.save_content",
+      module: "Storageaccount_client.save_content",
       error: e,
     });
     process.exit(1);

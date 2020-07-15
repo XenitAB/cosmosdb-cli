@@ -10,7 +10,7 @@ const create_directories_recursive = async (
     await fs.ensureDir(directory);
   } catch (e) {
     logger.error({
-      function: "Fs_client.create_directories_recursive",
+      module: "Fs_client.create_directories_recursive",
       error: e,
     });
     process.exit(1);
@@ -24,17 +24,17 @@ export const save_item = async (
   try {
     await create_directories_recursive(file_name);
     logger.debug({
-      function: "Fs_client.save_item",
+      module: "Fs_client.save_item",
       message: `Saving to ${file_name}`,
     });
     await fs.writeFile(file_name, items);
     logger.debug({
-      function: "Fs_client.save_item",
+      module: "Fs_client.save_item",
       message: `Finished saving to ${file_name}`,
     });
   } catch (e) {
     logger.error({
-      function: "Fs_client.save_item",
+      module: "Fs_client.save_item",
       error: e,
     });
     process.exit(1);

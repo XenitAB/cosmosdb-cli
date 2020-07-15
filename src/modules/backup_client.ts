@@ -41,7 +41,7 @@ export const client = async (config: Config.t): Promise<void> => {
       }
       default: {
         logger.error({
-          function: "backup_client",
+          module: "Backup_client.backup_client",
           error: "No storage location defined.",
         });
         break;
@@ -49,7 +49,7 @@ export const client = async (config: Config.t): Promise<void> => {
     }
   } catch (e) {
     logger.error({
-      function: "Backup_client.backup_client",
+      module: "Backup_client.backup_client",
       error: e,
     });
     process.exit(1);
@@ -112,7 +112,7 @@ const backup_cosmosdb_containers_to_filesystem = async (
     );
   } catch (e) {
     logger.error({
-      function: "Backup_client.backup_cosmosdb_containers_to_filesystem",
+      module: "Backup_client.backup_cosmosdb_containers_to_filesystem",
       error: e,
     });
     process.exit(1);
