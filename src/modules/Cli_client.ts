@@ -68,8 +68,6 @@ export const client = (args: string[]): CommanderStatic => {
   try {
     const cli = commander.description("CosmosDB CLI Client");
 
-    cli.option("--no-banner", "Remove banner from CLI output");
-
     // cosmosdb-cli backup
     cli
       .command("backup <location>")
@@ -96,12 +94,11 @@ export const client = (args: string[]): CommanderStatic => {
       )
       .option("--cosmosdb-account-key <string>", "CosmosDB Account Key")
       .option("--filesystem-path <string>", "Path to store backup")
-      .action(function (
-        location: "azure-storage-account" | "filesystem",
-        cmd_obj: t
-      ) {
-        Backup_client.client(to_config({ ...cmd_obj, type: location }));
-      });
+      .action(
+        (location: "azure-storage-account" | "filesystem", cmd_obj: t) => {
+          Backup_client.client(to_config({ ...cmd_obj, type: location }));
+        }
+      );
 
     cli.parse(args);
 

@@ -1,9 +1,12 @@
 import * as Cli_client from "./modules/Cli_client";
 
-const main = async () => {
-  Cli_client.client(process.argv);
+const main = () => {
+  try {
+    Cli_client.client(process.argv);
+  } catch (e) {
+    console.log(e);
+    process.exit(1);
+  }
 };
 
-main().catch((error) => {
-  console.error(error);
-});
+main();
