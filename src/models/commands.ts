@@ -1,3 +1,5 @@
+import * as Config_fixtures from "../fixtures/config";
+
 // Backup
 type backup = {
   command: "backup";
