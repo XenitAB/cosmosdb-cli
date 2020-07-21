@@ -1,8 +1,9 @@
-import * as Cli_client from "./modules/Cli_client";
+import * as Args_client from "./clients/args";
+import * as Cli_client from "./clients/cli";
 
 const main = () => {
   try {
-    Cli_client.client(process.argv);
+    Args_client.from_args(process.argv.slice(2)).then(Cli_client.client);
   } catch (e) {
     console.log(e);
     process.exit(1);
