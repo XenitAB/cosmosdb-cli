@@ -45,7 +45,7 @@ export const save_content = async (
   blob_name: string,
   container_client: ContainerClient
 ): Promise<void> => {
-  return block_blob_client(container_client, blob_name).then((client) => {
-    client.upload(content, Buffer.byteLength(content));
-  });
+  return block_blob_client(container_client, blob_name)
+    .then((client) => client.upload(content, Buffer.byteLength(content)))
+    .then((_) => {});
 };

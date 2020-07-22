@@ -7,7 +7,7 @@ const create_directories_recursive = (filename: string): Promise<void> => {
 };
 
 export const save_item = (items: string, file_name: string): Promise<void> => {
-  return create_directories_recursive(file_name).then((_) =>
+  return create_directories_recursive(file_name).then(() =>
     fs.writeFile(file_name, items)
   );
 };
