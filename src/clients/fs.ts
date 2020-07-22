@@ -1,5 +1,5 @@
 import fs from "fs-extra";
-import path, { resolve } from "path";
+import path from "path";
 
 const create_directories_recursive = (filename: string): Promise<void> => {
   return new Promise((_resolve, reject) => {

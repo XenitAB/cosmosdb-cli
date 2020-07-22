@@ -8,29 +8,36 @@ export const container_client = (
   account: string,
   container: string,
   key: string
-): ContainerClient => {
-  try {
-    const sharedKeyCredential = new StorageSharedKeyCredential(account, key);
-    const containerClient = new ContainerClient(
-      `https://${account}.blob.core.windows.net/${container}`,
-      sharedKeyCredential
-    );
-    return containerClient;
-  } catch (e) {
-    return e;
-  }
+): Promise<ContainerClient> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const shared_key_credential = new StorageSharedKeyCredential(
+        account,
+        key
+      );
+      const container_client = new ContainerClient(
+        `https://${account}.blob.core.windows.net/${container}`,
+        shared_key_credential
+      );
+      resolve(container_client);
+    } catch (e) {
+      reject(e);
+    }
+  });
 };
 
 const block_blob_client = (
   container_client: ContainerClient,
   blob_name: string
-): BlockBlobClient => {
-  try {
-    const blockBlobClient = container_client.getBlockBlobClient(blob_name);
-    return blockBlobClient;
-  } catch (e) {
-    return e;
-  }
+): Promise<BlockBlobClient> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const block_blob_client = container_client.getBlockBlobClient(blob_name);
+      resolve(block_blob_client);
+    } catch (e) {
+      reject(e);
+    }
+  });
 };
 
 export const save_content = async (
@@ -38,22 +45,12 @@ export const save_content = async (
   blob_name: string,
   container_client: ContainerClient
 ): Promise<void> => {
-  try {
-    const client = block_blob_client(container_client, blob_name);
-    logger.debug({
-      module: "Storageaccount_client.save_content",
-      message: `Uploading up to ${blob_name}`,
+  return new Promise((_resolve, reject) => {
+    block_blob_client(container_client, blob_name).then((client) => {
+      client
+        .upload(content, Buffer.byteLength(content))
+        .then((_) => _resolve())
+        .catch(reject);
     });
-    await client.upload(content, Buffer.byteLength(content));
-    logger.debug({
-      module: "Storageaccount_client.save_content",
-      message: `Finished upload to ${blob_name}`,
-    });
-  } catch (e) {
-    logger.error({
-      module: "Storageaccount_client.save_content",
-      error: e,
-    });
-    process.exit(1);
-  }
+  });
 };

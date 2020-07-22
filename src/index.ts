@@ -1,5 +1,6 @@
 import * as Args_client from "./clients/args";
 import * as Cli_client from "./clients/cli";
+import logger from "./clients/logger";
 
 const main = () => {
   try {
@@ -7,7 +8,7 @@ const main = () => {
       .then(Cli_client.client)
       .catch((e) => console.error(e));
   } catch (e) {
-    console.log(e);
+    logger.error(e);
     process.exit(1);
   }
 };

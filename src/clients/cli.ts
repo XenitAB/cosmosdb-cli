@@ -2,6 +2,7 @@ import * as Args_models from "../models/args";
 import * as Config_fixtures from "../fixtures/config";
 import * as Config_client from "./config";
 import * as Cosmosdb_client from "./cosmosdb";
+import * as Storageaccount_client from "./storageaccount";
 import * as Backup_client from "./backup";
 
 export const client = (args: Args_models.t): Promise<void> => {
@@ -21,9 +22,21 @@ export const client = (args: Args_models.t): Promise<void> => {
                     config.get("cosmosdb_account_key")
                   )
                     .then(Cosmosdb_client.get_all_items)
-                    .then(console.log)
-                    .then(_resolve)
-                    .catch(reject);
+                    .then((items_by_containers) => {
+                      Storageaccount_client.container_client(
+                        config.get("storage_account_name"),
+                        config.get("storage_account_container"),
+                        config.get("storage_account_key")
+                      ).then((container_client) => {
+                        Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
+                          container_client,
+                          items_by_containers,
+                          `${Date.now().toString()}/`
+                        )
+                          .then(_resolve)
+                          .catch(reject);
+                      });
+                    });
                 });
                 break;
               case "filesystem":
