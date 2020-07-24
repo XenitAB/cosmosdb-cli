@@ -1,4 +1,3 @@
-import * as Config_fixtures from "./config";
 import * as Args_models from "./args";
 
 export enum Command {
@@ -37,14 +36,6 @@ export const is_command = (s: string): s is Command => {
   return Object.values(Command).includes(s as Command);
 };
 
-const is_valid_backup_sub_command = (s: string): s is Backup_sub_command => {
-  return Object.values(Backup_sub_command).includes(s as Backup_sub_command);
-};
-
-const is_valid_restore_sub_command = (s: string): s is Restore_sub_command => {
-  return Object.values(Restore_sub_command).includes(s as Restore_sub_command);
-};
-
 export enum Backup_sub_command {
   azure_storage_account = "azure-storage-account",
   filesystem = "filesystem",
@@ -55,14 +46,41 @@ export enum Restore_sub_command {
   filesystem = "filesystem",
 }
 
+const is_valid_backup_sub_command = (s: string): s is Backup_sub_command => {
+  return Object.values(Backup_sub_command).includes(s as Backup_sub_command);
+};
+
+const is_valid_restore_sub_command = (s: string): s is Restore_sub_command => {
+  return Object.values(Restore_sub_command).includes(s as Restore_sub_command);
+};
+
+export const get_backup_sub_command = (s: string): string => {
+  return Object.entries(Backup_sub_command)
+    .filter(([_key, value]) => {
+      if (value === s) {
+        return true;
+      }
+    })
+    .reduce((_acc, [key, _value]) => key, {})
+    .toString();
+};
+
+export const get_restore_sub_command = (s: string): string => {
+  return Object.entries(Restore_sub_command)
+    .filter(([_key, value]) => {
+      if (value === s) {
+        return true;
+      }
+    })
+    .reduce((_acc, [key, _value]) => key, {})
+    .toString();
+};
+
 type t<command, sub_command> = {
   command: command;
   sub_command?: sub_command;
   args?: string[];
 };
-
-type backup_command = t<Command.backup, Backup_sub_command>;
-type restore_command = t<Command.restore, Restore_sub_command>;
 
 type backup_azure_storage_account = t<
   Command.backup,
