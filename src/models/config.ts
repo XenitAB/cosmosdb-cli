@@ -1,4 +1,4 @@
-import * as Convict from "convict";
+import { Config, Schema } from "convict";
 
 // types
 export type cosmosdb = {
@@ -16,8 +16,13 @@ export type filesystem = {
   filesystem_path: string;
 };
 
+// configs
+export type cosmosdb_config = Config<cosmosdb>;
+export type azure_storage_account_config = Config<azure_storage_account>;
+export type filesystem_config = Config<filesystem>;
+
 // schemas
-export const cosmosdb: Convict.Schema<cosmosdb> = {
+export const cosmosdb: Schema<cosmosdb> = {
   cosmosdb_account_endpoint: {
     doc: "CosmosDB Account Endpoint",
     format: String,
@@ -35,7 +40,7 @@ export const cosmosdb: Convict.Schema<cosmosdb> = {
   },
 };
 
-export const azure_storage_account: Convict.Schema<azure_storage_account> = {
+export const azure_storage_account: Schema<azure_storage_account> = {
   storage_account_name: {
     doc: "Azure Storage Account Name",
     format: String,
@@ -60,7 +65,7 @@ export const azure_storage_account: Convict.Schema<azure_storage_account> = {
   },
 };
 
-export const filesystem: Convict.Schema<filesystem> = {
+export const filesystem: Schema<filesystem> = {
   filesystem_path: {
     doc: "Filesystem path",
     format: String,

@@ -1,4 +1,5 @@
 import * as Commands_model from "../models/commands";
+
 // types
 type args = string[];
 type command = string;
@@ -10,9 +11,9 @@ export type t = {
   args?: args;
 };
 
+// functions
 const pretty_print_enum = <T>(e: T) => Object.values(e).join(", ");
 
-// functions
 const to_command = (t: string[]): Promise<t> => {
   return new Promise((resolve, reject) => {
     try {
