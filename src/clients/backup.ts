@@ -16,7 +16,7 @@ const save_item_to_storage_account = (
   const blob_name = `${prefix_string}${db_id}${delimiter_string}${continer_id}${suffix_string}`;
   const items = JSON.stringify(items_by_containers.items);
 
-  return Storageaccount_client.save_content(items, blob_name, container_client);
+  return Storageaccount_client.save_item(items, blob_name, container_client);
 };
 
 const save_items_to_storage_account = (
@@ -85,11 +85,7 @@ const save_item_to_fs = (
   const file_name = `${file_path}${prefix_string}${db_id}${delimiter_string}${container_id}${suffix_string}`;
   const items = JSON.stringify(items_by_container.items);
 
-  console.log("Backing up: " + file_name);
-
-  return Fs_client.save_item(items, file_name).then(() =>
-    console.log("Finished backup of: " + file_name)
-  );
+  return Fs_client.save_item(items, file_name);
 };
 
 const save_items_to_fs = (

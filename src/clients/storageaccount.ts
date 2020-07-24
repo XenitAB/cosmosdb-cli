@@ -3,6 +3,7 @@ import {
   BlockBlobClient,
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
+import logger, * as Logger from "./logger";
 
 export const container_client = (
   account: string,
@@ -40,12 +41,23 @@ const block_blob_client = (
   });
 };
 
-export const save_content = async (
+export const save_item = (
   content: string,
   blob_name: string,
   container_client: ContainerClient
 ): Promise<void> => {
+  logger.info({
+    location: "Storageaccount.save_item",
+    msg: "Saving item",
+    destination: blob_name,
+  });
   return block_blob_client(container_client, blob_name)
     .then((client) => client.upload(content, Buffer.byteLength(content)))
-    .then((_) => {});
+    .then((_) => {
+      logger.info({
+        location: "Storageaccount.save_item",
+        msg: "Saved item",
+        destination: blob_name,
+      });
+    });
 };
