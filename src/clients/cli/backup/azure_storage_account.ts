@@ -6,20 +6,15 @@ import * as Storageaccount_client from "../../storageaccount";
 import * as Backup_client from "../../backup";
 
 export const client = (args: Commands_model.commands): Promise<void> => {
-  const config = Config_client.to_config({
-    ...Config_model.cosmosdb,
-    ...Config_model.azure_storage_account,
-  });
-  return Cosmosdb_client.client(
-    config.get("cosmosdb_account_endpoint"),
-    config.get("cosmosdb_account_key")
-  )
+  const cosmosdb_config = Config_client.to_config(Config_model.cosmosdb);
+  const storageaccount_config = Config_client.to_config(
+    Config_model.azure_storage_account
+  );
+  return Cosmosdb_client.client(cosmosdb_config)
     .then(Cosmosdb_client.get_all_items)
     .then((items_by_containers) =>
       Storageaccount_client.container_client(
-        config.get("storage_account_name"),
-        config.get("storage_account_container"),
-        config.get("storage_account_key")
+        storageaccount_config
       ).then((container_client) =>
         Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
           container_client,

@@ -2,6 +2,8 @@
 import * as Fs_client from "./fs";
 import * as Storageaccount_client from "./storageaccount";
 import * as Cosmosdb_models from "../models/cosmosdb";
+import * as Config_models from "../models/config";
+import Convict from "convict";
 import { ContainerClient } from "@azure/storage-blob";
 
 const save_item_to_storage_account = (
@@ -125,11 +127,12 @@ const save_items_to_fs = (
 
 export const backup_cosmosdb_containers_to_filesystem = (
   items_by_containers: Cosmosdb_models.items_by_containers,
-  file_path: string,
+  config: Convict.Config<Config_models.filesystem>,
   prefix?: string,
   suffix?: string,
   delimiter?: string
 ): Promise<void> => {
+  const file_path = config.get("filesystem_path");
   const prefix_string = prefix === undefined ? "" : prefix;
   const suffix_string = suffix === undefined ? "" : suffix;
   const delimiter_string = delimiter === undefined ? "/" : delimiter;

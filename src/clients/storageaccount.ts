@@ -3,13 +3,16 @@ import {
   BlockBlobClient,
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
-import logger, * as Logger from "./logger";
+import * as Config_models from "../models/config";
+import Convict from "convict";
+import logger from "./logger";
 
 export const container_client = (
-  account: string,
-  container: string,
-  key: string
+  config: Convict.Config<Config_models.azure_storage_account>
 ): Promise<ContainerClient> => {
+  const account = config.get("storage_account_name");
+  const key = config.get("storage_account_key");
+  const container = config.get("storage_account_container");
   return new Promise((resolve, reject) => {
     try {
       const shared_key_credential = new StorageSharedKeyCredential(

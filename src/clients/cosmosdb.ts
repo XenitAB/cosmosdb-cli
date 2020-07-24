@@ -1,10 +1,13 @@
 import { CosmosClient } from "@azure/cosmos";
 import * as Cosmosdb_models from "../models/cosmosdb";
+import * as Config_models from "../models/config";
+import Convict from "convict";
 
 export const client = (
-  endpoint: string,
-  key: string
+  config: Convict.Config<Config_models.cosmosdb>
 ): Promise<CosmosClient> => {
+  const endpoint = config.get("cosmosdb_account_endpoint");
+  const key = config.get("cosmosdb_account_key");
   return new Promise((resolve, reject) => {
     try {
       const cosmosdb_client = new CosmosClient({
