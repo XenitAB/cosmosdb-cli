@@ -1,10 +1,11 @@
 FROM node:lts-buster-slim as builder
 WORKDIR /usr/src/app
 
-COPY package.json tsconfig.json package-lock.json ./
+COPY package.json tsconfig.json package-lock.json jest.config.js ./
 COPY src/ ./src/
 RUN npm install --no-optional
 RUN npm run build
+RUN npm run test
 
 FROM node:lts-buster-slim as runtime
 
