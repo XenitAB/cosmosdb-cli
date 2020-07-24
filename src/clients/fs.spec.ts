@@ -1,0 +1,27 @@
+import { save_item } from "./fs";
+import fs from "fs-extra";
+import { v4 as uuidv4 } from "uuid";
+
+const date = Date.now();
+const random_string = uuidv4();
+const file_path = `/tmp/${random_string}`;
+const file_name = `${file_path}/${date}.txt`;
+const mock_object = {
+  date,
+  uuid: random_string,
+  test: true,
+  something: "test",
+};
+const json_data = JSON.stringify(mock_object);
+
+describe("fs tests", () => {
+  afterAll(() => {
+    return fs.remove(file_path).then(() => {});
+  });
+
+  it("should create file with json data", () => {
+    return save_item(json_data, file_name)
+      .then(() => fs.readFile(file_name, "UTF-8"))
+      .then((output) => expect(JSON.parse(output)).toEqual(mock_object));
+  });
+});
