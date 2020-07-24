@@ -4,7 +4,7 @@ import * as Config_client from "../../config";
 import * as Cosmosdb_client from "../../cosmosdb";
 import * as Backup_client from "../../backup";
 
-export const client = (args: Commands_model.commands): Promise<void> => {
+export const client = (): Promise<void> => {
   const cosmosdb_config = Config_client.to_config(Config_model.cosmosdb);
   const filesystem_config = Config_client.to_config(Config_model.filesystem);
   return Cosmosdb_client.client(cosmosdb_config)

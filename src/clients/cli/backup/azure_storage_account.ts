@@ -5,7 +5,7 @@ import * as Cosmosdb_client from "../../cosmosdb";
 import * as Storageaccount_client from "../../storageaccount";
 import * as Backup_client from "../../backup";
 
-export const client = (args: Commands_model.commands): Promise<void> => {
+export const client = (): Promise<void> => {
   const cosmosdb_config = Config_client.to_config(Config_model.cosmosdb);
   const storageaccount_config = Config_client.to_config(
     Config_model.azure_storage_account
