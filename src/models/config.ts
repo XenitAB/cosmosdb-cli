@@ -10,10 +10,16 @@ export type azure_storage_account = {
   storage_account_name: string;
   storage_account_container: string;
   storage_account_key: string;
+  storage_account_prefix: string;
+  storage_account_suffix: string;
+  storage_account_delimiter: string;
 };
 
 export type filesystem = {
   filesystem_path: string;
+  filesystem_prefix: string;
+  filesystem_suffix: string;
+  filesystem_delimiter: string;
 };
 
 // schemas
@@ -58,6 +64,27 @@ const azure_storage_account: Schema<azure_storage_account> = {
     env: "COSMOSDB_CLI_STORAGE_ACCOUNT_KEY",
     sensitive: true,
   },
+  storage_account_prefix: {
+    doc: "Azure Storage Account prefix",
+    format: String,
+    default: `${Date.now().toString()}/`,
+    arg: "storage-account-prefix",
+    env: "COSMOSDB_CLI_STORAGE_ACCOUNT_PREFIX",
+  },
+  storage_account_suffix: {
+    doc: "Azure Storage Account suffix",
+    format: String,
+    default: "",
+    arg: "storage-account-suffix",
+    env: "COSMOSDB_CLI_STORAGE_ACCOUNT_SUFFIX",
+  },
+  storage_account_delimiter: {
+    doc: "Azure Storage Account delimiter",
+    format: String,
+    default: "/",
+    arg: "storage-account-delimiter",
+    env: "COSMOSDB_CLI_STORAGE_ACCOUNT_DELIMITER",
+  },
 };
 
 const filesystem: Schema<filesystem> = {
@@ -67,6 +94,27 @@ const filesystem: Schema<filesystem> = {
     default: null,
     arg: "filesystem-path",
     env: "COSMOSDB_CLI_FILESYSTEM_PATH",
+  },
+  filesystem_prefix: {
+    doc: "Filesystem prefix",
+    format: String,
+    default: `${Date.now().toString()}/`,
+    arg: "filesystem-prefix",
+    env: "COSMOSDB_CLI_FILESYSTEM_PREFIX",
+  },
+  filesystem_suffix: {
+    doc: "Filesystem suffix",
+    format: String,
+    default: "",
+    arg: "filesystem-suffix",
+    env: "COSMOSDB_CLI_FILESYSTEM_SUFFIX",
+  },
+  filesystem_delimiter: {
+    doc: "Filesystem delimiter",
+    format: String,
+    default: "/",
+    arg: "filesystem-delimiter",
+    env: "COSMOSDB_CLI_FILESYSTEM_DELIMITER",
   },
 };
 
@@ -97,6 +145,9 @@ export const get_azure_storage_account_config = (): Promise<
       storage_account_name: config.get("storage_account_name"),
       storage_account_container: config.get("storage_account_container"),
       storage_account_key: config.get("storage_account_key"),
+      storage_account_prefix: config.get("storage_account_prefix"),
+      storage_account_suffix: config.get("storage_account_suffix"),
+      storage_account_delimiter: config.get("storage_account_delimiter"),
     };
   });
 
@@ -104,5 +155,8 @@ export const get_filesystem_config = (): Promise<filesystem> =>
   to_config(filesystem).then((config) => {
     return {
       filesystem_path: config.get("filesystem_path"),
+      filesystem_prefix: config.get("filesystem_prefix"),
+      filesystem_suffix: config.get("filesystem_suffix"),
+      filesystem_delimiter: config.get("filesystem_delimiter"),
     };
   });

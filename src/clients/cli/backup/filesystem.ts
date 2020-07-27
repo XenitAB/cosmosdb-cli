@@ -8,8 +8,7 @@ export const client = (): Promise<void> => {
       Config_model.get_filesystem_config().then((filesystem) =>
         Backup_client.backup_cosmosdb_containers_to_filesystem(
           filesystem,
-          items_by_containers,
-          `${Date.now().toString()}/`
+          items_by_containers
         )
       )
     )

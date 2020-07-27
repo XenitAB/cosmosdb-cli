@@ -9,8 +9,7 @@ export const client = (): Promise<void> => {
         (azure_storage_account) =>
           Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
             azure_storage_account,
-            items_by_containers,
-            `${Date.now().toString()}/`
+            items_by_containers
           )
       )
     )
