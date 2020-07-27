@@ -1,4 +1,3 @@
-// import * as Storageaccount_client from "./storageaccount";
 import * as Fs_client from "./fs";
 import * as Storageaccount_client from "./storageaccount";
 import * as Cosmosdb_models from "../models/cosmosdb";
