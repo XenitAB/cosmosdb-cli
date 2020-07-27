@@ -1,7 +1,7 @@
 import {
   ContainerClient,
   BlockBlobClient,
-  StorageSharedKeyCredential,
+  BlobServiceClient,
 } from "@azure/storage-blob";
 import * as Config_models from "../models/config";
 import logger from "./logger";
@@ -14,13 +14,11 @@ const container_client = (
   const container = azure_storage_account.storage_account_container;
   return new Promise((resolve, reject) => {
     try {
-      const shared_key_credential = new StorageSharedKeyCredential(
-        account,
-        key
+      const blob_service_client = BlobServiceClient.fromConnectionString(
+        `DefaultEndpointsProtocol=https;AccountName=${account};AccountKey=${key};EndpointSuffix=core.windows.net`
       );
-      const container_client = new ContainerClient(
-        `https://${account}.blob.core.windows.net/${container}`,
-        shared_key_credential
+      const container_client = blob_service_client.getContainerClient(
+        container
       );
       resolve(container_client);
     } catch (e) {

@@ -27,7 +27,6 @@ const get_databases = (
     .then((databases) => {
       return databases.resources.map((database) => {
         return {
-          client: client,
           db_id: database.id,
         };
       });
@@ -35,9 +34,10 @@ const get_databases = (
 };
 
 const get_containers_by_db = (
+  client: CosmosClient,
   database: Cosmosdb_models.database
 ): Promise<Cosmosdb_models.containers> => {
-  return database.client
+  return client
     .database(database.db_id)
     .containers.readAll()
     .fetchAll()
@@ -52,12 +52,13 @@ const get_containers_by_db = (
 };
 
 const get_containers_by_dbs = (
+  client: CosmosClient,
   databases: Cosmosdb_models.databases,
   prev_containers?: Cosmosdb_models.containers
 ): Promise<Cosmosdb_models.containers> => {
   const [database, ...rest] = databases;
   if (rest.length === 0) {
-    return get_containers_by_db(database).then((containers) => {
+    return get_containers_by_db(client, database).then((containers) => {
       if (prev_containers) {
         return containers.concat(prev_containers);
       } else {
@@ -65,20 +66,25 @@ const get_containers_by_dbs = (
       }
     });
   } else {
-    return get_containers_by_db(database).then((containers) => {
+    return get_containers_by_db(client, database).then((containers) => {
       if (prev_containers) {
-        return get_containers_by_dbs(rest, containers.concat(prev_containers));
+        return get_containers_by_dbs(
+          client,
+          rest,
+          containers.concat(prev_containers)
+        );
       } else {
-        return get_containers_by_dbs(rest, containers);
+        return get_containers_by_dbs(client, rest, containers);
       }
     });
   }
 };
 
 const get_items_by_container = (
+  client: CosmosClient,
   container: Cosmosdb_models.container
 ): Promise<Cosmosdb_models.items_by_container> => {
-  return container.client
+  return client
     .database(container.db_id)
     .container(container.container_id)
     .items.readAll()
@@ -93,12 +99,13 @@ const get_items_by_container = (
 };
 
 const get_items_by_containers = (
+  client: CosmosClient,
   containers: Cosmosdb_models.containers,
   prev_items?: Cosmosdb_models.items_by_containers
 ): Promise<Cosmosdb_models.items_by_containers> => {
   const [container, ...rest] = containers;
   if (rest.length === 0) {
-    return get_items_by_container(container).then((items) => {
+    return get_items_by_container(client, container).then((items) => {
       if (prev_items) {
         return prev_items.concat(items);
       } else {
@@ -106,11 +113,11 @@ const get_items_by_containers = (
       }
     });
   } else {
-    return get_items_by_container(container).then((items) => {
+    return get_items_by_container(client, container).then((items) => {
       if (prev_items) {
-        return get_items_by_containers(rest, prev_items.concat(items));
+        return get_items_by_containers(client, rest, prev_items.concat(items));
       } else {
-        return get_items_by_containers(rest, [items]);
+        return get_items_by_containers(client, rest, [items]);
       }
     });
   }
@@ -121,7 +128,7 @@ export const get_all_items = (
 ): Promise<Cosmosdb_models.items_by_containers> => {
   return client(cosmosdb).then((client) =>
     get_databases(client)
-      .then(get_containers_by_dbs)
-      .then(get_items_by_containers)
+      .then((databases) => get_containers_by_dbs(client, databases))
+      .then((containers) => get_items_by_containers(client, containers))
   );
 };

@@ -1,7 +1,6 @@
-import { CosmosClient, ItemDefinition } from "@azure/cosmos";
+import { ItemDefinition } from "@azure/cosmos";
 
 export type database = {
-  client: CosmosClient;
   db_id: string;
 };
 
