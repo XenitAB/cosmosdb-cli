@@ -4,15 +4,14 @@ import {
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
 import * as Config_models from "../models/config";
-import Convict from "convict";
 import logger from "./logger";
 
-export const container_client = (
-  config: Convict.Config<Config_models.azure_storage_account>
+const container_client = (
+  azure_storage_account: Config_models.azure_storage_account
 ): Promise<ContainerClient> => {
-  const account = config.get("storage_account_name");
-  const key = config.get("storage_account_key");
-  const container = config.get("storage_account_container");
+  const account = azure_storage_account.storage_account_name;
+  const key = azure_storage_account.storage_account_key;
+  const container = azure_storage_account.storage_account_container;
   return new Promise((resolve, reject) => {
     try {
       const shared_key_credential = new StorageSharedKeyCredential(
@@ -47,14 +46,15 @@ const block_blob_client = (
 export const save_item = (
   content: string,
   blob_name: string,
-  container_client: ContainerClient
+  azure_storage_account: Config_models.azure_storage_account
 ): Promise<void> => {
   logger.info({
     location: "Storageaccount.save_item",
     msg: "Saving item",
     destination: blob_name,
   });
-  return block_blob_client(container_client, blob_name)
+  return container_client(azure_storage_account)
+    .then((container_client) => block_blob_client(container_client, blob_name))
     .then((client) => client.upload(content, Buffer.byteLength(content)))
     .then((_) => {
       logger.info({

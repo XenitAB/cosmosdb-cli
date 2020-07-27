@@ -2,11 +2,9 @@ import { CosmosClient } from "@azure/cosmos";
 import * as Cosmosdb_models from "../models/cosmosdb";
 import * as Config_models from "../models/config";
 
-export const client = (
-  config: Config_models.cosmosdb_config
-): Promise<CosmosClient> => {
-  const endpoint = config.get("cosmosdb_account_endpoint");
-  const key = config.get("cosmosdb_account_key");
+const client = (cosmosdb: Config_models.cosmosdb): Promise<CosmosClient> => {
+  const endpoint = cosmosdb.cosmosdb_account_endpoint;
+  const key = cosmosdb.cosmosdb_account_key;
   return new Promise((resolve, reject) => {
     try {
       const cosmosdb_client = new CosmosClient({
@@ -119,9 +117,11 @@ const get_items_by_containers = (
 };
 
 export const get_all_items = (
-  client: CosmosClient
+  cosmosdb: Config_models.cosmosdb
 ): Promise<Cosmosdb_models.items_by_containers> => {
-  return get_databases(client)
-    .then(get_containers_by_dbs)
-    .then(get_items_by_containers);
+  return client(cosmosdb).then((client) =>
+    get_databases(client)
+      .then(get_containers_by_dbs)
+      .then(get_items_by_containers)
+  );
 };
