@@ -11,9 +11,6 @@ const save_item_to_storage_account = (
   suffix_string: string,
   delimiter_string: string
 ): Promise<void> => {
-  console.log("--------------");
-  console.log(items_by_containers);
-  console.log("--------------");
   const db_id = items_by_containers.db_id;
   const continer_id = items_by_containers.container_id;
   const blob_name = `${prefix_string}${db_id}${delimiter_string}${continer_id}${suffix_string}`;
