@@ -18,8 +18,8 @@ jobs:
       - run: npm install --no-optional
       - run: npm run build
       - run: npm test
-        continue-on-error: true
 
       - uses: IgnusG/jest-report-action@v2.3.3
+        if: always()
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
