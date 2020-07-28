@@ -48,5 +48,10 @@
   "license": "ISC",
   "optionalDependencies": {
     "fsevents": "^2.1.3"
+  },
+  "jest-junit": {
+    "suiteNameTemplate": "{filepath}",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}"
   }
 }
