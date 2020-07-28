@@ -18,8 +18,8 @@ jobs:
       - run: npm install --no-optional
       - run: npm run build
       - run: npm test
+        continue-on-error: true
 
-      - uses: ashley-taylor/junit-report-annotations-action@1.3
-        if: always()
+      - uses: IgnusG/jest-report-action@v2.3.3
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
