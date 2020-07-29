@@ -12,18 +12,15 @@ const container_client = (
   const account = azure_storage_account.storage_account_name;
   const key = azure_storage_account.storage_account_key;
   const container = azure_storage_account.storage_account_container;
-  return new Promise((resolve, reject) => {
-    try {
-      const blob_service_client = BlobServiceClient.fromConnectionString(
-        `DefaultEndpointsProtocol=https;AccountName=${account};AccountKey=${key};EndpointSuffix=core.windows.net`
-      );
-      const container_client = blob_service_client.getContainerClient(
-        container
-      );
-      resolve(container_client);
-    } catch (e) {
-      reject(e);
-    }
+  const protocol = azure_storage_account.storage_account_protocol;
+  const connection_string_suffix =
+    azure_storage_account.storage_account_connectionstring_suffix;
+  return new Promise((resolve) => {
+    const blob_service_client = BlobServiceClient.fromConnectionString(
+      `DefaultEndpointsProtocol=${protocol};AccountName=${account};AccountKey=${key};${connection_string_suffix}`
+    );
+    const container_client = blob_service_client.getContainerClient(container);
+    resolve(container_client);
   });
 };
 
@@ -31,13 +28,9 @@ const block_blob_client = (
   container_client: ContainerClient,
   blob_name: string
 ): Promise<BlockBlobClient> => {
-  return new Promise((resolve, reject) => {
-    try {
-      const block_blob_client = container_client.getBlockBlobClient(blob_name);
-      resolve(block_blob_client);
-    } catch (e) {
-      reject(e);
-    }
+  return new Promise((resolve) => {
+    const block_blob_client = container_client.getBlockBlobClient(blob_name);
+    resolve(block_blob_client);
   });
 };
 

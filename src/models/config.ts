@@ -13,6 +13,8 @@ export type azure_storage_account = {
   storage_account_prefix: string;
   storage_account_suffix: string;
   storage_account_delimiter: string;
+  storage_account_protocol: string;
+  storage_account_connectionstring_suffix: string;
 };
 
 export type filesystem = {
@@ -85,6 +87,20 @@ const azure_storage_account: Schema<azure_storage_account> = {
     arg: "storage-account-delimiter",
     env: "COSMOSDB_CLI_STORAGE_ACCOUNT_DELIMITER",
   },
+  storage_account_protocol: {
+    doc: "Azure Storage Account protocol",
+    format: String,
+    default: "https",
+    arg: "storage-account-protocol",
+    env: "COSMOSDB_CLI_STORAGE_ACCOUNT_PROTOCOL",
+  },
+  storage_account_connectionstring_suffix: {
+    doc: "Azure Storage Account connection string suffix",
+    format: String,
+    default: "EndpointSuffix=core.windows.net;",
+    arg: "storage-account-connectionstring-suffix",
+    env: "COSMOSDB_CLI_STORAGE_ACCOUNT_CONNECTIONSTRING_SUFFIX",
+  },
 };
 
 const filesystem: Schema<filesystem> = {
@@ -148,6 +164,10 @@ export const get_azure_storage_account_config = (): Promise<
       storage_account_prefix: config.get("storage_account_prefix"),
       storage_account_suffix: config.get("storage_account_suffix"),
       storage_account_delimiter: config.get("storage_account_delimiter"),
+      storage_account_protocol: config.get("storage_account_protocol"),
+      storage_account_connectionstring_suffix: config.get(
+        "storage_account_connectionstring_suffix"
+      ),
     };
   });
 
