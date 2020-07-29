@@ -21,8 +21,3 @@ jobs:
       - uses: mattallty/jest-github-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: IgnusG/jest-report-action@v2.3.3
-        if: always()
-        with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
