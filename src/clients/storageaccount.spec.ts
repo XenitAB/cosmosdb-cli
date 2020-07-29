@@ -48,30 +48,38 @@ describe("storageaccount tests", () => {
     return container_client.delete();
   });
 
-  it("should create file with json data", () => {
-    return save_item(json_data, blob_name, mock_azure_storage_account)
+  it("should create file with json data", (done) => {
+    expect.assertions(1);
+    save_item(json_data, blob_name, mock_azure_storage_account)
       .then(() => block_blob_client.download(0))
       .then((stream) => {
-        return streamToString(stream.readableStreamBody!).then((output) =>
-          expect(JSON.parse(output)).toEqual(mock_object)
-        );
-      });
+        return streamToString(
+          stream.readableStreamBody as NodeJS.ReadableStream
+        ).then((output) => expect(JSON.parse(output)).toEqual(mock_object));
+      })
+      .then(done);
   });
-  it("should fail when using unknown container", async () => {
-    await expect(
+  it("should fail when using unknown container", (done) => {
+    expect.assertions(1);
+    expect(
       save_item(json_data, blob_name, {
         ...mock_azure_storage_account,
         storage_account_container: "does-not-exist",
       })
-    ).rejects.toThrow();
+    )
+      .rejects.toThrow()
+      .then(done);
   });
-  it("should fail when using wrong key", async () => {
-    await expect(
+  it("should fail when using wrong key", (done) => {
+    expect.assertions(1);
+    expect(
       save_item(json_data, blob_name, {
         ...mock_azure_storage_account,
         storage_account_key: "this-is-wrong",
       })
-    ).rejects.toThrow();
+    )
+      .rejects.toThrow()
+      .then(done);
   });
 });
 

@@ -92,7 +92,6 @@ const get_items_by_container = (
     .then((items) => {
       return {
         ...container,
-        item_count: items.resources.length,
         items: items.resources.map((item) => item),
       };
     });

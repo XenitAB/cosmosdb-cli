@@ -15,13 +15,16 @@ const mock_object = {
 const json_data = JSON.stringify(mock_object);
 
 describe("fs tests", () => {
-  afterAll(() => {
-    return fs.remove(file_path).then(() => {});
+  afterAll((done) => {
+    fs.remove(file_path).then(done);
   });
 
-  it("should create file with json data", () => {
-    return save_item(json_data, file_name)
+  it("should create file with json data", (done) => {
+    expect.assertions(1);
+
+    save_item(json_data, file_name)
       .then(() => fs.readFile(file_name, "UTF-8"))
-      .then((output) => expect(JSON.parse(output)).toEqual(mock_object));
+      .then((output) => expect(JSON.parse(output)).toEqual(mock_object))
+      .then(done);
   });
 });

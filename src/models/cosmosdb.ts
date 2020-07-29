@@ -13,7 +13,6 @@ export type container = database & {
 export type containers = container[];
 
 export type items_by_container = container & {
-  item_count: number;
   items: ItemDefinition[];
 };
 
