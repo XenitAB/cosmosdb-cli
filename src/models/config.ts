@@ -4,6 +4,7 @@ import Convict, { Config, Schema } from "convict";
 export type cosmosdb = {
   cosmosdb_account_endpoint: string;
   cosmosdb_account_key: string;
+  cosmosdb_reject_unauthorized: boolean;
 };
 
 export type azure_storage_account = {
@@ -40,6 +41,13 @@ const cosmosdb: Schema<cosmosdb> = {
     arg: "cosmosdb-account-key",
     env: "COSMOSDB_CLI_COSMOSDB_ACCOUNT_KEY",
     sensitive: true,
+  },
+  cosmosdb_reject_unauthorized: {
+    doc: "CosmosDB Reject Unauthorized",
+    format: Boolean,
+    default: true,
+    arg: "cosmosdb-reject-unauthorized",
+    env: "COSMOSDB_CLI_COSMOSDB_REJECT_UNAUTHORIZED",
   },
 };
 
@@ -150,6 +158,7 @@ export const get_cosmosdb_config = (): Promise<cosmosdb> =>
     return {
       cosmosdb_account_endpoint: config.get("cosmosdb_account_endpoint"),
       cosmosdb_account_key: config.get("cosmosdb_account_key"),
+      cosmosdb_reject_unauthorized: config.get("cosmosdb_reject_unauthorized"),
     };
   });
 

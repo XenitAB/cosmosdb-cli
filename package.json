@@ -27,6 +27,7 @@
     "@types/jest": "^26.0.7",
     "@types/node": "^14.0.22",
     "@types/uuid": "^8.0.0",
+    "@zeit/cosmosdb-server": "^0.8.0",
     "azurite": "^3.8.0",
     "jest": "^26.1.0",
     "jest-junit": "^11.0.1",
