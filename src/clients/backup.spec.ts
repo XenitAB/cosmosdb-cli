@@ -6,7 +6,6 @@ import * as Cosmosdb_models from "../models/cosmosdb";
 const mock_items_by_container1: Cosmosdb_models.items_by_container = {
   db_id: "db_1",
   container_id: "container_1",
-  item_count: 1,
   items: [
     {
       id: "item_1",
@@ -23,7 +22,6 @@ const mock_items_by_container1: Cosmosdb_models.items_by_container = {
 const mock_items_by_container2: Cosmosdb_models.items_by_container = {
   db_id: "db_2",
   container_id: "container_2",
-  item_count: 1,
   items: [
     {
       id: "item_2",
@@ -40,7 +38,6 @@ const mock_items_by_container2: Cosmosdb_models.items_by_container = {
 const mock_items_by_container3: Cosmosdb_models.items_by_container = {
   db_id: "db_3",
   container_id: "container_3",
-  item_count: 1,
   items: [
     {
       id: "foo",
@@ -79,24 +76,33 @@ const mock_azure_storage_account: Config_models.azure_storage_account = {
 
 describe("backup tests - cosmosdb to azure storage account", () => {
   const mock_save_item = jest.spyOn(Storageaccount_client, "save_item");
-  it("should call save_item 1 time", () => {
-    return Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
+
+  beforeEach((done) => {
+    mock_save_item.mockClear();
+    done();
+  });
+
+  it("should call save_item 1 time", (done) => {
+    expect.assertions(1);
+    Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
       mock_azure_storage_account,
       [mock_items_by_container1]
     )
       .then(() => expect(mock_save_item).toHaveBeenCalledTimes(1))
-      .then(mock_save_item.mockClear);
+      .then(done);
   });
-  it("should call save_item 3 times", () => {
-    return Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
+  it("should call save_item 3 times", (done) => {
+    expect.assertions(1);
+    Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
       mock_azure_storage_account,
       mock_items_by_containers
     )
       .then(() => expect(mock_save_item).toHaveBeenCalledTimes(3))
-      .then(mock_save_item.mockClear);
+      .then(done);
   });
-  it("should call save_item with mock_items_by_container1", () => {
-    return Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
+  it("should call save_item with mock_items_by_container1", (done) => {
+    expect.assertions(1);
+    Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
       mock_azure_storage_account,
       [mock_items_by_container1]
     )
@@ -107,10 +113,11 @@ describe("backup tests - cosmosdb to azure storage account", () => {
           mock_azure_storage_account
         )
       )
-      .then(mock_save_item.mockClear);
+      .then(done);
   });
-  it("should call save_item with mock_items_by_container3 last", () => {
-    return Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
+  it("should call save_item with mock_items_by_container3 last", (done) => {
+    expect.assertions(1);
+    Backup_client.backup_cosmosdb_containers_to_storage_account_blob(
       mock_azure_storage_account,
       mock_items_by_containers
     )
@@ -121,7 +128,7 @@ describe("backup tests - cosmosdb to azure storage account", () => {
           mock_azure_storage_account
         )
       )
-      .then(mock_save_item.mockClear);
+      .then(done);
   });
 });
 
@@ -140,37 +147,45 @@ const mock_filesystem: Config_models.filesystem = {
 
 describe("backup tests - cosmosdb to filesystem", () => {
   const mock_save_item = jest.spyOn(Fs_client, "save_item");
-  it("should call save_item 1 time", () => {
-    return Backup_client.backup_cosmosdb_containers_to_filesystem(
-      mock_filesystem,
-      [mock_items_by_container1]
-    )
-      .then(() => expect(mock_save_item).toHaveBeenCalledTimes(1))
-      .then(mock_save_item.mockClear);
+
+  beforeEach((done) => {
+    mock_save_item.mockClear();
+    done();
   });
-  it("should call save_item 3 times", () => {
-    return Backup_client.backup_cosmosdb_containers_to_filesystem(
+
+  it("should call save_item 1 time", (done) => {
+    expect.assertions(1);
+    Backup_client.backup_cosmosdb_containers_to_filesystem(mock_filesystem, [
+      mock_items_by_container1,
+    ])
+      .then(() => expect(mock_save_item).toHaveBeenCalledTimes(1))
+      .then(done);
+  });
+  it("should call save_item 3 times", (done) => {
+    expect.assertions(1);
+    Backup_client.backup_cosmosdb_containers_to_filesystem(
       mock_filesystem,
       mock_items_by_containers
     )
       .then(() => expect(mock_save_item).toHaveBeenCalledTimes(3))
-      .then(mock_save_item.mockClear);
+      .then(done);
   });
-  it("should call save_item with mock_items_by_container1", () => {
-    return Backup_client.backup_cosmosdb_containers_to_filesystem(
-      mock_filesystem,
-      [mock_items_by_container1]
-    )
+  it("should call save_item with mock_items_by_container1", (done) => {
+    expect.assertions(1);
+    Backup_client.backup_cosmosdb_containers_to_filesystem(mock_filesystem, [
+      mock_items_by_container1,
+    ])
       .then(() =>
         expect(mock_save_item).toHaveBeenCalledWith(
           JSON.stringify(mock_items_by_container1.items),
           `${mock_filesystem.filesystem_path}${mock_filesystem.filesystem_prefix}${mock_items_by_container1.db_id}${mock_filesystem.filesystem_delimiter}${mock_items_by_container1.container_id}${mock_filesystem.filesystem_suffix}`
         )
       )
-      .then(mock_save_item.mockClear);
+      .then(done);
   });
-  it("should call save_item with mock_items_by_container3 last", () => {
-    return Backup_client.backup_cosmosdb_containers_to_filesystem(
+  it("should call save_item with mock_items_by_container3 last", (done) => {
+    expect.assertions(1);
+    Backup_client.backup_cosmosdb_containers_to_filesystem(
       mock_filesystem,
       mock_items_by_containers
     )
@@ -180,6 +195,6 @@ describe("backup tests - cosmosdb to filesystem", () => {
           `${mock_filesystem.filesystem_path}${mock_filesystem.filesystem_prefix}${mock_items_by_container3.db_id}${mock_filesystem.filesystem_delimiter}${mock_items_by_container3.container_id}${mock_filesystem.filesystem_suffix}`
         )
       )
-      .then(mock_save_item.mockClear);
+      .then(done);
   });
 });
