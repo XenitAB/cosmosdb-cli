@@ -17,7 +17,10 @@ jobs:
           node-version: "12.x"
       - run: npm install --no-optional
       - run: npm run build
-      - run: npm test
+
+      - uses: mattallty/jest-github-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: IgnusG/jest-report-action@v2.3.3
         if: always()
