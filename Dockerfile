@@ -5,20 +5,18 @@ COPY package.json tsconfig.json package-lock.json ./
 COPY src/ ./src/
 RUN npm install --no-optional --only-production
 
-FROM node:lts-buster-slim as tester
+FROM base as tester
 WORKDIR /usr/src/app
 
-COPY --from=base /usr/src/app /usr/src/app
 COPY jest.config.js ./
 COPY test/ ./test/
 RUN npm install --no-optional --only-development
 RUN npm run build
 RUN npm run test
 
-FROM node:lts-buster-slim as builder
+FROM base as builder
 WORKDIR /usr/src/app
 
-COPY --from=base /usr/src/app /usr/src/app
 RUN npm run build
 
 FROM node:lts-buster-slim as runtime
