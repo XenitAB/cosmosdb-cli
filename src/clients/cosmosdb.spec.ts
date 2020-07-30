@@ -1,8 +1,6 @@
 import * as Cosmosdb_client from "./cosmosdb";
 import * as Config_models from "../models/config";
-import cosmosdb_server from "@zeit/cosmosdb-server";
 import { CosmosClient, Container, ItemDefinition } from "@azure/cosmos";
-import { Server } from "http";
 import https from "https";
 
 const mock_cosmosdb: Config_models.cosmosdb = {
@@ -33,86 +31,108 @@ const mock_item3: ItemDefinition = {
 };
 const mock_items: ItemDefinition[] = [mock_item1, mock_item2, mock_item3];
 
-describe("cosmosdb tests with one db", () => {
-  const server = cosmosdb_server();
-  beforeAll((done) => {
-    start_cosmosdb_server(server)
-      .then(() =>
-        create_cosmosdb_db_container_items(
-          cosmosdb_client,
-          "db1",
-          "container1",
-          mock_items
-        )
+describe("cosmosdb tests", () => {
+  describe("one db", () => {
+    it("should return items from one container", (done) => {
+      expect.assertions(2);
+
+      create_cosmosdb_db_container_items(
+        cosmosdb_client,
+        "db1",
+        "container1",
+        mock_items
+      ).then(() =>
+        Cosmosdb_client.get_all_items(mock_cosmosdb)
+          .then((items) => {
+            expect(items.length).toEqual(1);
+            expect(items[0].items.length).toEqual(3);
+          })
+          .then(done)
+      );
+    });
+  });
+
+  describe("two dbs", () => {
+    it("should return items from two containers", (done) => {
+      expect.assertions(3);
+
+      create_cosmosdb_db_container_items(
+        cosmosdb_client,
+        "db2",
+        "container2",
+        mock_items
+      ).then(() =>
+        Cosmosdb_client.get_all_items(mock_cosmosdb)
+          .then((items) => {
+            expect(items.length).toEqual(2);
+            expect(items[0].items.length).toEqual(3);
+            expect(items[1].items.length).toEqual(3);
+          })
+          .then(done)
+      );
+    });
+  });
+
+  describe("three dbs", () => {
+    it("should return items from three containers", (done) => {
+      expect.assertions(4);
+
+      create_cosmosdb_db_container_items(
+        cosmosdb_client,
+        "db3",
+        "container3",
+        mock_items
+      ).then(() =>
+        Cosmosdb_client.get_all_items(mock_cosmosdb)
+          .then((items) => {
+            expect(items.length).toEqual(3);
+            expect(items[0].items.length).toEqual(3);
+            expect(items[1].items.length).toEqual(3);
+            expect(items[2].items.length).toEqual(3);
+          })
+          .then(done)
+      );
+    });
+  });
+
+  describe("multiple containers", () => {
+    it("should return items from four containers", (done) => {
+      expect.assertions(5);
+
+      create_cosmosdb_db_container_items(
+        cosmosdb_client,
+        "db1",
+        "container4",
+        mock_items
+      ).then(() =>
+        Cosmosdb_client.get_all_items(mock_cosmosdb)
+          .then((items) => {
+            expect(items.length).toEqual(4);
+            expect(items[0].items.length).toEqual(3);
+            expect(items[1].items.length).toEqual(3);
+            expect(items[2].items.length).toEqual(3);
+            expect(items[3].items.length).toEqual(3);
+          })
+          .then(done)
+      );
+    });
+  });
+
+  describe("failing test", () => {
+    it("should fail when using wrong uri", (done) => {
+      expect.assertions(1);
+
+      expect(
+        Cosmosdb_client.get_all_items({
+          ...mock_cosmosdb,
+          cosmosdb_account_endpoint: "https://localhost:1337",
+        })
       )
-      .then(done)
-      .catch((e) => {
-        console.error({
-          location: "Cosmosdb_spec.beforeAll",
-          error: e,
-        });
-        throw new Error(e);
-      });
-  });
-
-  afterAll((done) => {
-    stop_cosmosdb_server(server)
-      .then(() => {})
-      .then(done)
-      .catch((e) => {
-        console.error({
-          location: "Cosmosdb_spec.afterAll",
-          error: e,
-        });
-        throw new Error(e);
-      });
-  });
-
-  it("should return items from one container", (done) => {
-    expect.assertions(2);
-
-    Cosmosdb_client.get_all_items(mock_cosmosdb)
-      .then((items) => {
-        expect(items.length).toEqual(1);
-        expect(items[0].items.length).toEqual(3);
-      })
-      .then(done);
-  });
-
-  it("should fail when using wrong uri", (done) => {
-    expect.assertions(1);
-
-    expect(
-      Cosmosdb_client.get_all_items({
-        ...mock_cosmosdb,
-        cosmosdb_account_endpoint: "https://localhost:1337",
-      })
-    )
-      .rejects.toThrow()
-      .then(done);
+        .rejects.toThrow()
+        .then(done);
+    });
   });
 });
-
-// helper functions
-const start_cosmosdb_server = (cosmosdb_server: Server): Promise<Server> => {
-  return new Promise((resolve, reject) => {
-    try {
-      resolve(cosmosdb_server.listen(3000));
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-const stop_cosmosdb_server = (cosmosdb_server: Server): Promise<Server> => {
-  return new Promise((resolve, reject) => {
-    try {
-      resolve(cosmosdb_server.close());
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
 
 const create_cosmosdb_item = (
   container: Container,
@@ -142,9 +162,18 @@ const create_cosmosdb_db_container_items = (
   items: ItemDefinition[]
 ): Promise<void> => {
   return cosmosdb_client.databases
-    .create({
+    .createIfNotExists({
       id: database,
     })
-    .then((database) => database.database.containers.create({ id: container }))
-    .then((container) => create_cosmosdb_items(container.container, items));
+    .then((database) =>
+      database.database.containers.createIfNotExists({ id: container })
+    )
+    .then((container) => create_cosmosdb_items(container.container, items))
+    .catch((e) => {
+      console.error({
+        location: "Cosmosdb_spec.create_cosmosdb_db_container_items",
+        error: e,
+      });
+      throw new Error(e);
+    });
 };
