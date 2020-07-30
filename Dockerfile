@@ -8,7 +8,7 @@ RUN npm install --no-optional --only-production
 FROM base as tester
 WORKDIR /usr/src/app
 
-COPY jest.config.js ./
+COPY jest*.config.js ./
 COPY test/ ./test/
 RUN npm install --no-optional --only-development
 RUN npm run build
