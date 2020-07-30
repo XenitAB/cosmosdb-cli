@@ -11,20 +11,22 @@ import https from "https";
 import cosmosdb_server from "@zeit/cosmosdb-server";
 import { Server } from "http";
 
-export const mock_cosmosdb: Config_models.cosmosdb = {
-  cosmosdb_account_endpoint: "https://localhost:3000",
+const mock_port = 3000;
+const mock_cosmosdb: Config_models.cosmosdb = {
+  cosmosdb_account_endpoint: `https://localhost:${mock_port}`,
   cosmosdb_account_key: "dummy key",
   cosmosdb_reject_unauthorized: false,
 };
 
-export const get_cosmosdb_client = (mock_cosmosdb: Config_models.cosmosdb) =>
-  new CosmosClient({
+export const get_cosmosdb_client = (mock_cosmosdb: Config_models.cosmosdb) => {
+  return new CosmosClient({
     endpoint: mock_cosmosdb.cosmosdb_account_endpoint,
     key: mock_cosmosdb.cosmosdb_account_key,
     agent: new https.Agent({
       rejectUnauthorized: mock_cosmosdb.cosmosdb_reject_unauthorized,
     }),
   });
+};
 
 const cosmosdb_client = get_cosmosdb_client(mock_cosmosdb);
 
@@ -49,7 +51,7 @@ export const mock_items: ItemDefinition[] = [
 export const server = cosmosdb_server();
 
 beforeAll(async (done) => {
-  await start_cosmosdb_server(server).then(done);
+  await start_cosmosdb_server(server, mock_port).then(done);
 });
 
 afterAll(async (done) => {
@@ -179,11 +181,12 @@ describe("failing test", () => {
 
 // helper functions
 export const start_cosmosdb_server = (
-  cosmosdb_server: Server
+  cosmosdb_server: Server,
+  port: number
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     try {
-      cosmosdb_server.listen(3000);
+      cosmosdb_server.listen(port);
       resolve();
     } catch (e) {
       reject(e);
