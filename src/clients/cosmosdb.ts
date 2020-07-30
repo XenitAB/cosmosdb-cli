@@ -1,20 +1,19 @@
 import { CosmosClient } from "@azure/cosmos";
 import * as Cosmosdb_models from "../models/cosmosdb";
 import * as Config_models from "../models/config";
+import https from "https";
 
 const client = (cosmosdb: Config_models.cosmosdb): Promise<CosmosClient> => {
   const endpoint = cosmosdb.cosmosdb_account_endpoint;
   const key = cosmosdb.cosmosdb_account_key;
+  const reject_unauthorized = cosmosdb.cosmosdb_reject_unauthorized;
   return new Promise((resolve, reject) => {
-    try {
-      const cosmosdb_client = new CosmosClient({
-        endpoint: endpoint,
-        key: key,
-      });
-      resolve(cosmosdb_client);
-    } catch (e) {
-      reject(e);
-    }
+    const cosmosdb_client = new CosmosClient({
+      endpoint: endpoint,
+      key: key,
+      agent: new https.Agent({ rejectUnauthorized: reject_unauthorized }),
+    });
+    resolve(cosmosdb_client);
   });
 };
 
