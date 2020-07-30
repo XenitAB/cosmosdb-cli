@@ -11,19 +11,22 @@ import https from "https";
 import cosmosdb_server from "@zeit/cosmosdb-server";
 import { Server } from "http";
 
-const mock_cosmosdb: Config_models.cosmosdb = {
+export const mock_cosmosdb: Config_models.cosmosdb = {
   cosmosdb_account_endpoint: "https://localhost:3000",
   cosmosdb_account_key: "dummy key",
   cosmosdb_reject_unauthorized: false,
 };
 
-const cosmosdb_client = new CosmosClient({
-  endpoint: mock_cosmosdb.cosmosdb_account_endpoint,
-  key: mock_cosmosdb.cosmosdb_account_key,
-  agent: new https.Agent({
-    rejectUnauthorized: mock_cosmosdb.cosmosdb_reject_unauthorized,
-  }),
-});
+export const get_cosmosdb_client = (mock_cosmosdb: Config_models.cosmosdb) =>
+  new CosmosClient({
+    endpoint: mock_cosmosdb.cosmosdb_account_endpoint,
+    key: mock_cosmosdb.cosmosdb_account_key,
+    agent: new https.Agent({
+      rejectUnauthorized: mock_cosmosdb.cosmosdb_reject_unauthorized,
+    }),
+  });
+
+const cosmosdb_client = get_cosmosdb_client(mock_cosmosdb);
 
 const mock_item1: ItemDefinition = {
   id: "1",
@@ -37,9 +40,13 @@ const mock_item3: ItemDefinition = {
   id: "3",
   foo: "bar",
 };
-const mock_items: ItemDefinition[] = [mock_item1, mock_item2, mock_item3];
+export const mock_items: ItemDefinition[] = [
+  mock_item1,
+  mock_item2,
+  mock_item3,
+];
 
-const server = cosmosdb_server();
+export const server = cosmosdb_server();
 
 beforeAll(async (done) => {
   await start_cosmosdb_server(server).then(done);
@@ -171,7 +178,9 @@ describe("failing test", () => {
 });
 
 // helper functions
-const start_cosmosdb_server = (cosmosdb_server: Server): Promise<void> => {
+export const start_cosmosdb_server = (
+  cosmosdb_server: Server
+): Promise<void> => {
   return new Promise((resolve, reject) => {
     try {
       cosmosdb_server.listen(3000);
@@ -182,7 +191,9 @@ const start_cosmosdb_server = (cosmosdb_server: Server): Promise<void> => {
   });
 };
 
-const stop_cosmosdb_server = (cosmosdb_server: Server): Promise<void> => {
+export const stop_cosmosdb_server = (
+  cosmosdb_server: Server
+): Promise<void> => {
   return new Promise((resolve, reject) => {
     try {
       cosmosdb_server.close();
@@ -236,7 +247,7 @@ const create_cosmosdb_items = (
   }
 };
 
-const create_cosmosdb_db_container_items = (
+export const create_cosmosdb_db_container_items = (
   cosmosdb_client: CosmosClient,
   database: string,
   container: string,
@@ -259,7 +270,7 @@ const create_cosmosdb_db_container_items = (
     });
 };
 
-const remove_cosmosdb_database = (
+export const remove_cosmosdb_database = (
   cosmosdb_client: CosmosClient,
   database: DatabaseDefinition & Resource
 ): Promise<void> => {
