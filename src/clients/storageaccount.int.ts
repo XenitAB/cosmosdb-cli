@@ -2,6 +2,9 @@ import * as Config_models from "../models/config";
 import { save_item } from "./storageaccount";
 import { v4 as uuidv4 } from "uuid";
 import { BlobServiceClient } from "@azure/storage-blob";
+import logger from "./logger";
+
+logger.info = jest.fn();
 
 const date = Date.now();
 const random_string = uuidv4();

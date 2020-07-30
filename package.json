@@ -44,7 +44,8 @@
     "test": "jest --coverage --coverageReporters=lcov --coverageReporters=cobertura --coverageReporters=text --detectOpenHandles --ci --reporters=default --reporters=jest-junit",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "watch:build": "tsc -w",
-    "watch:test": "jest --watch"
+    "watch:test": "jest --projects jest-unit.config.js --watch",
+    "watch:test-all": "jest --watch"
   },
   "author": "",
   "license": "ISC",

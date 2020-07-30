@@ -1,6 +1,9 @@
 import { save_item } from "./fs";
 import fs from "fs-extra";
 import { v4 as uuidv4 } from "uuid";
+import logger from "./logger";
+
+logger.info = jest.fn();
 
 const date = Date.now();
 const random_string = uuidv4();
