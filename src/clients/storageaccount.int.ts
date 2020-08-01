@@ -3,6 +3,7 @@ import { save_item } from "./storageaccount";
 import { v4 as uuidv4 } from "uuid";
 import { BlobServiceClient } from "@azure/storage-blob";
 import logger from "./logger";
+import { stream_to_string } from "../__tests__/helpers";
 
 logger.info = jest.fn();
 
@@ -56,7 +57,7 @@ describe("storageaccount tests", () => {
     save_item(json_data, blob_name, mock_azure_storage_account)
       .then(() => block_blob_client.download(0))
       .then((stream) => {
-        return streamToString(
+        return stream_to_string(
           stream.readableStreamBody as NodeJS.ReadableStream
         ).then((output) => expect(JSON.parse(output)).toEqual(mock_object));
       })
@@ -85,18 +86,3 @@ describe("storageaccount tests", () => {
       .then(done);
   });
 });
-
-const streamToString = (
-  readableStream: NodeJS.ReadableStream
-): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const chunks: string[] = [];
-    readableStream.on("data", (data) => {
-      chunks.push(data.toString());
-    });
-    readableStream.on("end", () => {
-      resolve(chunks.join(""));
-    });
-    readableStream.on("error", reject);
-  });
-};
