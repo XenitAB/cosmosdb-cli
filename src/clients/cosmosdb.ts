@@ -7,7 +7,7 @@ const client = (cosmosdb: Config_models.cosmosdb): Promise<CosmosClient> => {
   const endpoint = cosmosdb.cosmosdb_account_endpoint;
   const key = cosmosdb.cosmosdb_account_key;
   const reject_unauthorized = cosmosdb.cosmosdb_reject_unauthorized;
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const cosmosdb_client = new CosmosClient({
       endpoint: endpoint,
       key: key,
@@ -29,6 +29,9 @@ const get_databases = (
           db_id: database.id,
         };
       });
+    })
+    .catch((e) => {
+      throw new Error(e);
     });
 };
 
