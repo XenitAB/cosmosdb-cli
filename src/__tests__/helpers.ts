@@ -10,6 +10,23 @@ import { Server } from "http";
 import https from "https";
 import * as Config_models from "../models/config";
 
+// storage account
+export const stream_to_string = (
+  readableStream: NodeJS.ReadableStream
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const chunks: string[] = [];
+    readableStream.on("data", (data) => {
+      chunks.push(data.toString());
+    });
+    readableStream.on("end", () => {
+      resolve(chunks.join(""));
+    });
+    readableStream.on("error", reject);
+  });
+};
+
+// cosmosdb
 export const get_cosmosdb_client = (mock_cosmosdb: Config_models.cosmosdb) => {
   return new CosmosClient({
     endpoint: mock_cosmosdb.cosmosdb_account_endpoint,
