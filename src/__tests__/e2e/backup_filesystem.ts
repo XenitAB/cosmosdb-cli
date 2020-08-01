@@ -17,11 +17,17 @@ import logger from "../../clients/logger";
 const date_string = Date.now().toString();
 const filesystem_path = "/tmp/";
 
-const mock_port = 3001;
+const mock_port = 3002;
 const mock_cosmosdb: Config_models.cosmosdb = {
   cosmosdb_account_endpoint: `https://localhost:${mock_port}`,
   cosmosdb_account_key: "dummy key",
   cosmosdb_reject_unauthorized: false,
+};
+const mock_filesystem: Config_models.filesystem = {
+  filesystem_path: filesystem_path,
+  filesystem_prefix: `${date_string}/`,
+  filesystem_suffix: "",
+  filesystem_delimiter: "/",
 };
 
 const server = cosmosdb_server();
@@ -38,9 +44,9 @@ const argv: string[] = [
   "--cosmosdb-reject-unauthorized",
   mock_cosmosdb.cosmosdb_reject_unauthorized.toString(),
   "--filesystem-path",
-  filesystem_path,
+  mock_filesystem.filesystem_path,
   "--filesystem-prefix",
-  `${date_string}/`,
+  mock_filesystem.filesystem_prefix,
 ];
 
 process.argv = argv;
