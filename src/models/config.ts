@@ -146,7 +146,7 @@ const filesystem: Schema<filesystem> = {
 const to_config = <T>(schema: Schema<T>): Promise<Config<T>> => {
   return new Promise((resolve, reject) => {
     try {
-      resolve(Convict(schema));
+      resolve(Convict(schema).validate());
     } catch (e) {
       reject(e);
     }
