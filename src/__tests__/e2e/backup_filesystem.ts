@@ -22,6 +22,7 @@ const mock_cosmosdb: Config_models.cosmosdb = {
   cosmosdb_account_endpoint: `https://localhost:${mock_port}`,
   cosmosdb_account_key: "dummy key",
   cosmosdb_reject_unauthorized: false,
+  cosmosdb_use_keyvault: false,
 };
 const mock_filesystem: Config_models.filesystem = {
   filesystem_path: filesystem_path,
