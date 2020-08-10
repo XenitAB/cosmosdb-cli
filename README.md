@@ -4,6 +4,10 @@
 
 CLI client to handle backup of CosmosDB.
 
+# Background
+
+This project was created for me to learn functional programming using TypeScript. It's a fun side project and hopefully something that can be used to help someone in the future.
+
 # Container Image
 
 Container image available at: quay.io/xenitab/cosmosdb-cli
@@ -15,6 +19,18 @@ docker run -it quay.io/xenitab/cosmosdb-cli:<version> backup azure-storage-accou
 ```
 
 # How to use
+
+## Azure Key Vault
+
+You can grab secrets from Azure KeyVault for CosmosDB and Azure Storage Account. It will work with Environment Variables, Managed Service Identity and Azure CLI credentials (local file).
+
+Read more here: https://www.npmjs.com/package/@azure/identity
+
+```shell
+backup azure-storage-account --keyvault-name kvcdblab --cosmosdb-use-keyvault true --storage-account-use-keyvault true --storage-account-container backup-container
+```
+
+The above will grab `CosmosDB Account Name`, `CosmosDB Account Key`, `Storage Account Name` and `Storage Acccount key` from Azure KeyVault. Take a look in [config.ts](src/models/config.ts) to see the default secret names. They can be changed using environment variables and command line arguments.
 
 ## Backup to Azure Storage Account
 

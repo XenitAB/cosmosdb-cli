@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@azure/cosmos": "^3.7.4",
+    "@azure/identity": "^1.1.0-preview.5",
+    "@azure/keyvault-secrets": "^4.0.4",
     "@azure/storage-blob": "^12.2.0-preview.1",
     "chalk": "^4.1.0",
     "clear": "^0.1.0",

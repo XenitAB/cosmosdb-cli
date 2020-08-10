@@ -72,6 +72,7 @@ const mock_azure_storage_account: Config_models.azure_storage_account = {
   storage_account_suffix: "",
   storage_account_protocol: "https",
   storage_account_connectionstring_suffix: "EndpointSuffix=core.windows.net;",
+  storage_account_use_keyvault: false,
 };
 
 describe("backup tests - cosmosdb to azure storage account", () => {

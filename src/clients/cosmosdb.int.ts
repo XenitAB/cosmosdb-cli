@@ -15,6 +15,7 @@ const mock_cosmosdb: Config_models.cosmosdb = {
   cosmosdb_account_endpoint: `https://localhost:${mock_port}`,
   cosmosdb_account_key: "dummy key",
   cosmosdb_reject_unauthorized: false,
+  cosmosdb_use_keyvault: false,
 };
 
 const cosmosdb_client = get_cosmosdb_client(mock_cosmosdb);

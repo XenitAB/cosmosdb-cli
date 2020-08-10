@@ -22,6 +22,7 @@ const mock_cosmosdb: Config_models.cosmosdb = {
   cosmosdb_account_endpoint: `https://localhost:${mock_port}`,
   cosmosdb_account_key: "dummy key",
   cosmosdb_reject_unauthorized: false,
+  cosmosdb_use_keyvault: false,
 };
 const mock_azure_storage_account: Config_models.azure_storage_account = {
   storage_account_name: "devstoreaccount1",
@@ -34,6 +35,7 @@ const mock_azure_storage_account: Config_models.azure_storage_account = {
   storage_account_protocol: "http",
   storage_account_connectionstring_suffix:
     "BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;",
+  storage_account_use_keyvault: false,
 };
 
 const server = cosmosdb_server();
