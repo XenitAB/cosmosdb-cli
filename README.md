@@ -43,11 +43,11 @@ cosmocli backup azure-storage-account --cosmosdb-account-endpoint https://<cosmo
 ### Backup to Azure Storage Account Using Environment Variables
 
 ```shell
-export COSMOSDB_CLI_COSMOSDB_ACCOUNT_ENDPOINT="https://<cosmosdb-account-name>.documents.azure.com:443/"
-export COSMOSDB_CLI_COSMOSDB_ACCOUNT_KEY="<cosmosdb-account-key>"
-export COSMOSDB_CLI_STORAGE_ACCOUNT_NAME="<storage-account-name>"
-export COSMOSDB_CLI_STORAGE_ACCOUNT_CONTAINER="<storage-account-container>"
-export COSMOSDB_CLI_STORAGE_ACCOUNT_KEY="<storage-account-key>"
+export COSMOCLI_COSMOSDB_ACCOUNT_ENDPOINT="https://<cosmosdb-account-name>.documents.azure.com:443/"
+export COSMOCLI_COSMOSDB_ACCOUNT_KEY="<cosmosdb-account-key>"
+export COSMOCLI_STORAGE_ACCOUNT_NAME="<storage-account-name>"
+export COSMOCLI_STORAGE_ACCOUNT_CONTAINER="<storage-account-container>"
+export COSMOCLI_STORAGE_ACCOUNT_KEY="<storage-account-key>"
 
 cosmocli backup azure-storage-account
 ```
@@ -63,9 +63,9 @@ cosmocli backup azure-storage-account --cosmosdb-account-endpoint https://<cosmo
 ### Backup to File System Using Environment Variables
 
 ```shell
-export COSMOSDB_CLI_COSMOSDB_ACCOUNT_ENDPOINT="https://<cosmosdb-account-name>.documents.azure.com:443/"
-export COSMOSDB_CLI_COSMOSDB_ACCOUNT_KEY="<cosmosdb-account-key>"
-export COSMOSDB_CLI_FILESYSTEM_PATH="/tmp/"
+export COSMOCLI_COSMOSDB_ACCOUNT_ENDPOINT="https://<cosmosdb-account-name>.documents.azure.com:443/"
+export COSMOCLI_COSMOSDB_ACCOUNT_KEY="<cosmosdb-account-key>"
+export COSMOCLI_FILESYSTEM_PATH="/tmp/"
 
 cosmocli backup filesystem
 ```
