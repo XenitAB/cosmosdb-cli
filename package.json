@@ -1,11 +1,11 @@
 {
-  "name": "cosmosdb-cli",
+  "name": "cosmocli",
   "version": "0.1.0",
   "private": true,
   "description": "Cosmos DB CLI",
   "main": "./lib/index.js",
   "bin": {
-    "cosmosdb-cli": "./lib/index.js"
+    "cosmocli": "./lib/index.js"
   },
   "dependencies": {
     "@azure/cosmos": "^3.7.4",

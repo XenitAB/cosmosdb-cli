@@ -35,7 +35,7 @@ const server = cosmosdb_server();
 
 const argv: string[] = [
   "node",
-  "cosmosdb-cli",
+  "cosmocli",
   "backup",
   "filesystem",
   "--cosmosdb-account-endpoint",
