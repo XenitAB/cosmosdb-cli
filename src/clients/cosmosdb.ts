@@ -18,7 +18,8 @@ const client = (cosmosdb: Config_models.cosmosdb): Promise<CosmosClient> => {
 };
 
 const get_databases = (
-  client: CosmosClient
+  client: CosmosClient,
+  cosmosdb: Config_models.cosmosdb
 ): Promise<Cosmosdb_models.databases> => {
   return client.databases
     .readAll()
@@ -26,6 +27,11 @@ const get_databases = (
     .then((databases) => {
       return databases.resources.map((database) => {
         return {
+          account_name: cosmosdb.cosmosdb_account_endpoint
+            .replace("http://", "")
+            .replace("https://", "")
+            .replace(/:.*/g, "")
+            .split(".")[0],
           db_id: database.id,
         };
       });
@@ -128,7 +134,7 @@ export const get_all_items = (
   cosmosdb: Config_models.cosmosdb
 ): Promise<Cosmosdb_models.items_by_containers> => {
   return client(cosmosdb).then((client) =>
-    get_databases(client)
+    get_databases(client, cosmosdb)
       .then((databases) => get_containers_by_dbs(client, databases))
       .then((containers) => get_items_by_containers(client, containers))
   );

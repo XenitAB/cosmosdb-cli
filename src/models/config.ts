@@ -33,6 +33,7 @@ export type azure_storage_account = {
   storage_account_protocol: string;
   storage_account_connectionstring_suffix: string;
   storage_account_use_keyvault: boolean;
+  storage_account_use_datafactory_format: boolean;
 };
 
 export type filesystem = {
@@ -186,6 +187,14 @@ const azure_storage_account: Schema<azure_storage_account> = {
     arg: "storage-account-use-keyvault",
     env: "COSMOCLI_STORAGE_ACCOUNT_USE_KEYVAULT",
   },
+  storage_account_use_datafactory_format: {
+    doc:
+      "Use Azure Data Factory format to store backups (cosmosdb account / db name / collection name / timestamp / backup.json)",
+    format: Boolean,
+    default: false,
+    arg: "storage-account-use-datafactory-format",
+    env: "COSMOCLI_STORAGE_ACCOUNT_USE_DATAFACTORY_FORMAT",
+  },
 };
 
 const filesystem: Schema<filesystem> = {
@@ -334,6 +343,9 @@ export const get_azure_storage_account_config = (): Promise<
                   storage_account_use_keyvault: config.get(
                     "storage_account_use_keyvault"
                   ),
+                  storage_account_use_datafactory_format: config.get(
+                    "storage_account_use_datafactory_format"
+                  ),
                 };
               })
             )
@@ -353,6 +365,9 @@ export const get_azure_storage_account_config = (): Promise<
         ),
         storage_account_use_keyvault: config.get(
           "storage_account_use_keyvault"
+        ),
+        storage_account_use_datafactory_format: config.get(
+          "storage_account_use_datafactory_format"
         ),
       };
     }
