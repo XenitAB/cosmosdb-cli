@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  node-cosmocli:
+  - apiVersion: v2
+    appVersion: v0.1.6
+    created: "2020-08-20T15:42:53.902750633Z"
+    description: A Helm chart for node-cosmocli
+    digest: 50a1c8f63e1d36595e072c16a33469b68c67b9512e91a51b8f53c67ff126ede0
+    name: node-cosmocli
+    type: application
+    urls:
+    - https://XenitAB.github.io/node-cosmocli/node-cosmocli-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-08-20T15:42:53.902063034Z"
