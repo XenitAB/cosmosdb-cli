@@ -1,6 +1,10 @@
 import { ItemDefinition } from "@azure/cosmos";
 
-export type database = {
+export type account = {
+  account_name: string;
+};
+
+export type database = account & {
   db_id: string;
 };
 

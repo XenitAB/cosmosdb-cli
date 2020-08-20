@@ -4,6 +4,7 @@ import * as Config_models from "../models/config";
 import * as Cosmosdb_models from "../models/cosmosdb";
 
 const mock_items_by_container1: Cosmosdb_models.items_by_container = {
+  account_name: "account",
   db_id: "db_1",
   container_id: "container_1",
   items: [
@@ -20,6 +21,7 @@ const mock_items_by_container1: Cosmosdb_models.items_by_container = {
 };
 
 const mock_items_by_container2: Cosmosdb_models.items_by_container = {
+  account_name: "account",
   db_id: "db_2",
   container_id: "container_2",
   items: [
@@ -36,6 +38,7 @@ const mock_items_by_container2: Cosmosdb_models.items_by_container = {
 };
 
 const mock_items_by_container3: Cosmosdb_models.items_by_container = {
+  account_name: "account",
   db_id: "db_3",
   container_id: "container_3",
   items: [
@@ -73,6 +76,20 @@ const mock_azure_storage_account: Config_models.azure_storage_account = {
   storage_account_protocol: "https",
   storage_account_connectionstring_suffix: "EndpointSuffix=core.windows.net;",
   storage_account_use_keyvault: false,
+  storage_account_use_datafactory_format: false,
+};
+
+const mock_azure_storage_account2: Config_models.azure_storage_account = {
+  storage_account_name: "name",
+  storage_account_container: "container",
+  storage_account_key: "key",
+  storage_account_delimiter: "/",
+  storage_account_prefix: `${Date.now().toString()}/`,
+  storage_account_suffix: "",
+  storage_account_protocol: "https",
+  storage_account_connectionstring_suffix: "EndpointSuffix=core.windows.net;",
+  storage_account_use_keyvault: false,
+  storage_account_use_datafactory_format: false,
 };
 
 describe("backup tests - cosmosdb to azure storage account", () => {
