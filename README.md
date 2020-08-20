@@ -1,8 +1,8 @@
-# CosmosDB CLI Client
+# cosmocli
 
-[![Docker Repository on Quay](https://quay.io/repository/xenitab/cosmosdb-cli/status "Docker Repository on Quay")](https://quay.io/repository/xenitab/cosmosdb-cli)
+[![Docker Repository on Quay](https://quay.io/repository/xenitab/cosmocli/status "Docker Repository on Quay")](https://quay.io/repository/xenitab/cosmocli)
 
-CLI client to handle backup of CosmosDB.
+CLI client to handle backup of Azure Cosmos DB.
 
 # Background
 
@@ -10,12 +10,12 @@ This project was created for me to learn functional programming using TypeScript
 
 # Container Image
 
-Container image available at: quay.io/xenitab/cosmosdb-cli
+Container image available at: quay.io/xenitab/cosmocli
 
 ## Running Container
 
 ```shell
-docker run -it quay.io/xenitab/cosmosdb-cli:<version> backup azure-storage-account --cosmosdb-account-endpoint <cosmosdb-account-endpoint> --cosmosdb-account-key <cosmosdb-account-key> --storage-account-name <storage-account-name> --storage-account-container <storage-account-container> --storage-account-key <storage-account-key>
+docker run -it quay.io/xenitab/cosmocli:<version> backup azure-storage-account --cosmosdb-account-endpoint <cosmosdb-account-endpoint> --cosmosdb-account-key <cosmosdb-account-key> --storage-account-name <storage-account-name> --storage-account-container <storage-account-container> --storage-account-key <storage-account-key>
 ```
 
 # How to use
@@ -37,7 +37,7 @@ The above will grab `CosmosDB Account Name`, `CosmosDB Account Key`, `Storage Ac
 ### Backup to Azure Storage Account Using Command Line Parameters
 
 ```shell
-cosmosdb-cli backup azure-storage-account --cosmosdb-account-endpoint https://<cosmosdb-account-name>.documents.azure.com:443/ --cosmosdb-account-key <cosmosdb-account-key> --storage-account-name <storage-account-name> --storage-account-container <storage-account-container> --storage-account-key <storage-account-key>
+cosmocli backup azure-storage-account --cosmosdb-account-endpoint https://<cosmosdb-account-name>.documents.azure.com:443/ --cosmosdb-account-key <cosmosdb-account-key> --storage-account-name <storage-account-name> --storage-account-container <storage-account-container> --storage-account-key <storage-account-key>
 ```
 
 ### Backup to Azure Storage Account Using Environment Variables
@@ -49,7 +49,7 @@ export COSMOSDB_CLI_STORAGE_ACCOUNT_NAME="<storage-account-name>"
 export COSMOSDB_CLI_STORAGE_ACCOUNT_CONTAINER="<storage-account-container>"
 export COSMOSDB_CLI_STORAGE_ACCOUNT_KEY="<storage-account-key>"
 
-cosmosdb-cli backup azure-storage-account
+cosmocli backup azure-storage-account
 ```
 
 ## Backup to File System
@@ -57,7 +57,7 @@ cosmosdb-cli backup azure-storage-account
 ### Backup to File System Using Command Line Parameters
 
 ```shell
-cosmosdb-cli backup azure-storage-account --cosmosdb-account-endpoint https://<cosmosdb-account-name>.documents.azure.com:443/ --cosmosdb-account-key <cosmosdb-account-key> --filesystem-path /tmp/
+cosmocli backup azure-storage-account --cosmosdb-account-endpoint https://<cosmosdb-account-name>.documents.azure.com:443/ --cosmosdb-account-key <cosmosdb-account-key> --filesystem-path /tmp/
 ```
 
 ### Backup to File System Using Environment Variables
@@ -67,5 +67,5 @@ export COSMOSDB_CLI_COSMOSDB_ACCOUNT_ENDPOINT="https://<cosmosdb-account-name>.d
 export COSMOSDB_CLI_COSMOSDB_ACCOUNT_KEY="<cosmosdb-account-key>"
 export COSMOSDB_CLI_FILESYSTEM_PATH="/tmp/"
 
-cosmosdb-cli backup filesystem
+cosmocli backup filesystem
 ```

@@ -29,7 +29,7 @@ const mock_filesystem: Config_models.filesystem = {
 
 const argv_storage_account: string[] = [
   "node",
-  "cosmosdb-cli",
+  "cosmocli",
   "backup",
   "azure-storage-account",
   "--cosmosdb-account-endpoint",
@@ -54,7 +54,7 @@ const argv_storage_account: string[] = [
 
 const argv_storage_account_keyvault: string[] = [
   "node",
-  "cosmosdb-cli",
+  "cosmocli",
   "backup",
   "azure-storage-account",
   "--keyvault-name",
@@ -75,7 +75,7 @@ const argv_storage_account_keyvault: string[] = [
 
 const argv_filesystem: string[] = [
   "node",
-  "cosmosdb-cli",
+  "cosmocli",
   "backup",
   "filesystem",
   "--cosmosdb-account-endpoint",
@@ -92,7 +92,7 @@ const argv_filesystem: string[] = [
 
 const argv_filesystem_keyvault: string[] = [
   "node",
-  "cosmosdb-cli",
+  "cosmocli",
   "backup",
   "filesystem",
   "--keyvault-name",
