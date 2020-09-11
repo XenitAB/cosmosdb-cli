@@ -8,5 +8,5 @@ Args_model.from_args(process.argv.slice(2))
   .then(Cli_client.client)
   .catch((e) => {
     logger.error(e);
-    throw new Error(e);
+    process.exit(1);
   });
