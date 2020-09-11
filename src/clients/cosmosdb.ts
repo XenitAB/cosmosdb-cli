@@ -25,16 +25,22 @@ const get_databases = (
     .readAll()
     .fetchAll()
     .then((databases) => {
-      return databases.resources.map((database) => {
-        return {
-          account_name: cosmosdb.cosmosdb_account_endpoint
-            .replace("http://", "")
-            .replace("https://", "")
-            .replace(/:.*/g, "")
-            .split(".")[0],
-          db_id: database.id,
-        };
-      });
+      return databases.resources
+        .map((database) => {
+          if (database.id == null) {
+            return null;
+          }
+
+          return {
+            account_name: cosmosdb.cosmosdb_account_endpoint
+              .replace("http://", "")
+              .replace("https://", "")
+              .replace(/:.*/g, "")
+              .split(".")[0],
+            db_id: database.id,
+          };
+        })
+        .filter((x) => x != null) as Cosmosdb_models.databases;
     })
     .catch((e) => {
       throw new Error(e);

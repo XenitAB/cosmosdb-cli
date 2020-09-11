@@ -9,18 +9,20 @@ export const get_keyvault_secret = (
   keyvault_name: string,
   secret_name: string
 ): Promise<string> => {
-  return new Promise((resolve) => {
-    const azure_credential = new DefaultAzureCredential();
-    const url = `https://${keyvault_name}.vault.azure.net`;
-    const keyvault_client = new SecretClient(url, azure_credential);
-    keyvault_client.getSecret(secret_name).then((secret) => {
-      logger.info({
-        location: "Keyvault_client.get_keyvault_secret",
-        msg: "Extracted secret",
-        keyvault_name,
-        secret_name,
-      });
-      resolve(secret.value);
+  const azure_credential = new DefaultAzureCredential();
+  const url = `https://${keyvault_name}.vault.azure.net`;
+  const keyvault_client = new SecretClient(url, azure_credential);
+  return keyvault_client.getSecret(secret_name).then((secret) => {
+    logger.info({
+      location: "Keyvault_client.get_keyvault_secret",
+      msg: "Extracted secret",
+      keyvault_name,
+      secret_name,
     });
+    if (secret.value != null) {
+      return secret.value;
+    } else {
+      throw new Error(`Secret not found: ${secret_name}`);
+    }
   });
 };
