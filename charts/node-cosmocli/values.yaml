@@ -33,11 +33,16 @@ job:
   schedule: "0 */1 * * *"
   concurrencyPolicy: Replace
   restartPolicy: OnFailure
+  containerCommand:
+    - node
+    - --max-old-space-size=4096
+    - ./lib/index.js
   containerArgs:
     - backup
     - azure-storage-account
   startingDeadlineSeconds: 200
-  extraPodLabels: {}
+  extraPodLabels:
+    {}
     # aadpodidbinding: msi
 
 nameOverride: ""
@@ -49,7 +54,7 @@ podSecurityContext:
 securityContext:
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1000
@@ -59,8 +64,8 @@ resources:
   # limits:
   #   memory: 4096Mi
   requests:
-    cpu: 500m
-    memory: 256Mi
+    cpu: 1
+    memory: 4096Mi
 
 nodeSelector: {}
 
