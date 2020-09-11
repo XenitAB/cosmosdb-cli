@@ -28,6 +28,10 @@ spec:
 {{- range .Values.job.containerArgs }}
                 - {{ . | quote }}
 {{- end }}
+              command: 
+{{- range .Values.job.containerCommand }}
+                - {{ . | quote }}
+{{- end }}
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               resources:
