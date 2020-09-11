@@ -1,6 +1,6 @@
 # cosmocli
 
-[![Docker Repository on Quay](https://quay.io/repository/xenitab/cosmocli/status "Docker Repository on Quay")](https://quay.io/repository/xenitab/cosmocli)
+[![Docker Repository on Quay](https://quay.io/repository/xenitab/node-cosmocli/status "Docker Repository on Quay")](https://quay.io/repository/xenitab/node-cosmocli)
 
 CLI client to handle backup of Azure Cosmos DB.
 
@@ -10,12 +10,12 @@ This project was created for me to learn functional programming using TypeScript
 
 # Container Image
 
-Container image available at: quay.io/xenitab/cosmocli
+Container image available at: quay.io/xenitab/node-cosmocli
 
 ## Running Container
 
 ```shell
-docker run -it quay.io/xenitab/cosmocli:<version> backup azure-storage-account --cosmosdb-account-endpoint <cosmosdb-account-endpoint> --cosmosdb-account-key <cosmosdb-account-key> --storage-account-name <storage-account-name> --storage-account-container <storage-account-container> --storage-account-key <storage-account-key>
+docker run -it quay.io/xenitab/node-cosmocli:<version> backup azure-storage-account --cosmosdb-account-endpoint <cosmosdb-account-endpoint> --cosmosdb-account-key <cosmosdb-account-key> --storage-account-name <storage-account-name> --storage-account-container <storage-account-container> --storage-account-key <storage-account-key>
 ```
 
 # How to use
