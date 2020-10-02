@@ -100,6 +100,8 @@ const blob_service_client = BlobServiceClient.fromConnectionString(
 );
 const container_client = blob_service_client.getContainerClient(container);
 
+jest.setTimeout(20000);
+
 beforeAll(async (done) => {
   await start_cosmosdb_server(server, mock_port)
     .then(() => container_client.create())
