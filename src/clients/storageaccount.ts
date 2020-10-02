@@ -47,7 +47,7 @@ export const save_item = (
   });
   return container_client(azure_storage_account)
     .then((container_client) => block_blob_client(container_client, blob_name))
-    .then((client) => client.uploadStream(content, content.readableLength))
+    .then((client) => client.uploadStream(content, 4 * 1024 * 1024, 20))
     .then((_) => {
       logger.info({
         location: "Storageaccount.save_item",
