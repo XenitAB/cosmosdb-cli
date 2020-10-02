@@ -2,8 +2,18 @@ apiVersion: v1
 entries:
   node-cosmocli:
   - apiVersion: v2
+    appVersion: v0.3.0
+    created: "2020-10-02T06:59:35.826285082Z"
+    description: A Helm chart for node-cosmocli
+    digest: 2e3b97848b2dcfc0bcbb2c1a508ebc1e7fea5f5202c94c080805773d1fcfa841
+    name: node-cosmocli
+    type: application
+    urls:
+    - https://XenitAB.github.io/node-cosmocli/node-cosmocli-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: v0.2.2
-    created: "2020-09-11T09:13:01.788424542Z"
+    created: "2020-10-02T06:59:35.825813164Z"
     description: A Helm chart for node-cosmocli
     digest: a6dba06c507b0176908e28b4d39684b2ecc8469e6b3b1ecfc3e58fcd657253f7
     name: node-cosmocli
@@ -13,7 +23,7 @@ entries:
     version: 0.2.2
   - apiVersion: v2
     appVersion: v0.2.1
-    created: "2020-09-11T09:13:01.788045941Z"
+    created: "2020-10-02T06:59:35.825311146Z"
     description: A Helm chart for node-cosmocli
     digest: 619d5e50994773488b499aee2381db5ccd18fb06c1dda84e654b7f905c0be159
     name: node-cosmocli
@@ -23,7 +33,7 @@ entries:
     version: 0.2.1
   - apiVersion: v2
     appVersion: v0.2.0
-    created: "2020-09-11T09:13:01.787514439Z"
+    created: "2020-10-02T06:59:35.824735224Z"
     description: A Helm chart for node-cosmocli
     digest: 57dfbb23fb08ae5c75c19284a5ed93f01d0f6f273c340446b45b8793d7c3d07f
     name: node-cosmocli
@@ -31,4 +41,4 @@ entries:
     urls:
     - https://XenitAB.github.io/node-cosmocli/node-cosmocli-0.1.0.tgz
     version: 0.1.0
-generated: "2020-09-11T09:13:01.786522336Z"
+generated: "2020-10-02T06:59:35.824024298Z"
