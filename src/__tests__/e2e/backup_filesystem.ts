@@ -106,9 +106,9 @@ describe("end-to-end backup filesystem one db one container", () => {
 });
 
 describe("end-to-end backup filesystem two dbs two containers", () => {
-  it("should create two files with json array with three items", (done) => {
+  it("should create two files with json array with three items", async (done) => {
     expect.assertions(2);
-    remove_all_cosmosdb_databases(cosmosdb_client)
+    await remove_all_cosmosdb_databases(cosmosdb_client)
       .then(() =>
         create_cosmosdb_db_container_items(
           cosmosdb_client,
@@ -143,9 +143,9 @@ describe("end-to-end backup filesystem two dbs two containers", () => {
 });
 
 describe("end-to-end backup filesystem two dbs three containers", () => {
-  it("should create two files with json array with three items", (done) => {
+  it("should create two files with json array with three items", async (done) => {
     expect.assertions(3);
-    remove_all_cosmosdb_databases(cosmosdb_client)
+    await remove_all_cosmosdb_databases(cosmosdb_client)
       .then(() =>
         create_cosmosdb_db_container_items(
           cosmosdb_client,

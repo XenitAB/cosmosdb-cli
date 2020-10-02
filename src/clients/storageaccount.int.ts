@@ -1,8 +1,10 @@
-import * as Config_models from "../models/config";
-import { save_item } from "./storageaccount";
+import JsonStreamStringify from "json-stream-stringify";
 import { v4 as uuidv4 } from "uuid";
 import { BlobServiceClient } from "@azure/storage-blob";
+
+import { save_item } from "./storageaccount";
 import logger from "./logger";
+import * as Config_models from "../models/config";
 import { stream_to_string } from "../__tests__/helpers";
 
 logger.info = jest.fn();
@@ -16,7 +18,6 @@ const mock_object = {
   test: true,
   something: "test",
 };
-const json_data = JSON.stringify(mock_object);
 
 const mock_azure_storage_account: Config_models.azure_storage_account = {
   storage_account_name: "devstoreaccount1",
@@ -56,6 +57,9 @@ describe("storageaccount tests", () => {
 
   it("should create file with json data", (done) => {
     expect.assertions(1);
+
+    const json_data = new JsonStreamStringify(mock_object);
+
     save_item(json_data, blob_name, mock_azure_storage_account)
       .then(() => block_blob_client.download(0))
       .then((stream) => {
@@ -67,6 +71,9 @@ describe("storageaccount tests", () => {
   });
   it("should fail when using unknown container", (done) => {
     expect.assertions(1);
+
+    const json_data = new JsonStreamStringify(mock_object);
+
     expect(
       save_item(json_data, blob_name, {
         ...mock_azure_storage_account,
@@ -78,6 +85,9 @@ describe("storageaccount tests", () => {
   });
   it("should fail when using wrong key", (done) => {
     expect.assertions(1);
+
+    const json_data = new JsonStreamStringify(mock_object);
+
     expect(
       save_item(json_data, blob_name, {
         ...mock_azure_storage_account,

@@ -1,3 +1,4 @@
+import { Readable } from "stream";
 import {
   ContainerClient,
   BlockBlobClient,
@@ -35,7 +36,7 @@ const block_blob_client = (
 };
 
 export const save_item = (
-  content: string,
+  content: Readable,
   blob_name: string,
   azure_storage_account: Config_models.azure_storage_account
 ): Promise<void> => {
@@ -46,7 +47,7 @@ export const save_item = (
   });
   return container_client(azure_storage_account)
     .then((container_client) => block_blob_client(container_client, blob_name))
-    .then((client) => client.upload(content, Buffer.byteLength(content)))
+    .then((client) => client.uploadStream(content, content.readableLength))
     .then((_) => {
       logger.info({
         location: "Storageaccount.save_item",

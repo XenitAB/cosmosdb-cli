@@ -100,6 +100,8 @@ const blob_service_client = BlobServiceClient.fromConnectionString(
 );
 const container_client = blob_service_client.getContainerClient(container);
 
+jest.setTimeout(20000);
+
 beforeAll(async (done) => {
   await start_cosmosdb_server(server, mock_port)
     .then(() => container_client.create())
@@ -115,9 +117,9 @@ afterAll(async (done) => {
 });
 
 describe("end-to-end backup azure-storage-account one db one container", () => {
-  it("should create one file with json array with three items", (done) => {
+  it("should create one file with json array with three items", async (done) => {
     expect.assertions(1);
-    remove_all_cosmosdb_databases(cosmosdb_client)
+    await remove_all_cosmosdb_databases(cosmosdb_client)
       .then(() =>
         create_cosmosdb_db_container_items(
           cosmosdb_client,
