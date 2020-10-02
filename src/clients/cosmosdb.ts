@@ -104,9 +104,16 @@ const get_items_by_container = (
     .items.readAll({ bufferItems: true })
     .fetchAll()
     .then((items) => {
+    .catch((error) => {
+      logger.error({
+        location: "Cosmosdb.get_items_by_container",
+        msg: "Failed to fetch items",
+        container,
+        error,
+      });
       return {
         ...container,
-        items: items.resources.map((item) => item),
+        items: [],
       };
     });
 };

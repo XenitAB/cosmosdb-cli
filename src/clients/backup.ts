@@ -7,9 +7,16 @@ const save_item_to_storage_account = (
   azure_storage_account: Config_models.azure_storage_account,
   items_by_containers: Cosmosdb_models.items_by_container
 ): Promise<void> => {
-  const account_name = items_by_containers.account_name;
-  const db_id = items_by_containers.db_id;
-  const container_id = items_by_containers.container_id;
+  // If there are no items in the list there's no work to do
+  if (items_by_container.items.length === 0) {
+    const { items, ...container } = items_by_container;
+    logger.info({
+      location: "Backup.save_item_to_storage_account",
+      msg: "No items in list",
+      container: container,
+    });
+    return Promise.resolve();
+  }
   const prefix_string = azure_storage_account.storage_account_prefix;
   const suffix_string = azure_storage_account.storage_account_suffix;
   const delimiter_string = azure_storage_account.storage_account_delimiter;
