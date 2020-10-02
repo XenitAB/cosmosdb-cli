@@ -2,8 +2,9 @@ FROM node:lts-buster-slim as base
 WORKDIR /usr/src/app
 
 COPY package.json tsconfig.json package-lock.json ./
-COPY src/ ./src/
 RUN npm install --no-optional --only-production
+
+COPY src/ ./src/
 
 FROM base as tester
 WORKDIR /usr/src/app
