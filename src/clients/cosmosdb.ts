@@ -101,7 +101,7 @@ const get_items_by_container = (
   return client
     .database(container.db_id)
     .container(container.container_id)
-    .items.readAll()
+    .items.readAll({ bufferItems: true })
     .fetchAll()
     .then((items) => {
       return {
