@@ -1,7 +1,10 @@
+import https from "https";
 import { CosmosClient } from "@azure/cosmos";
+
+import logger from "./logger";
+
 import * as Cosmosdb_models from "../models/cosmosdb";
 import * as Config_models from "../models/config";
-import https from "https";
 
 const client = (cosmosdb: Config_models.cosmosdb): Promise<CosmosClient> => {
   const endpoint = cosmosdb.cosmosdb_account_endpoint;
@@ -98,12 +101,27 @@ const get_items_by_container = (
   client: CosmosClient,
   container: Cosmosdb_models.container
 ): Promise<Cosmosdb_models.items_by_container> => {
+  logger.info({
+    location: "Cosmosdb.get_items_by_container",
+    msg: "Fetching items",
+    container: container,
+  });
   return client
     .database(container.db_id)
     .container(container.container_id)
     .items.readAll({ bufferItems: true })
     .fetchAll()
     .then((items) => {
+      logger.info({
+        location: "Cosmosdb.get_items_by_container",
+        msg: "Sucessfully fetched items",
+        container: container,
+      });
+      return {
+        ...container,
+        items: items.resources,
+      };
+    })
     .catch((error) => {
       logger.error({
         location: "Cosmosdb.get_items_by_container",
