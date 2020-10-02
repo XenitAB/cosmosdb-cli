@@ -85,10 +85,10 @@ const create_cosmosdb_item = (
           });
           throw new Error(e);
         } else {
-          create_cosmosdb_item(container, item, retry_counter + 1);
+          return create_cosmosdb_item(container, item, retry_counter + 1);
         }
       } else {
-        create_cosmosdb_item(container, item, 1);
+        return create_cosmosdb_item(container, item, 1);
       }
     });
 };
@@ -161,9 +161,9 @@ export const remove_all_cosmosdb_databases = (
       if (databases.resources.length !== 0) {
         const [database, ...rest] = databases.resources;
         if (rest.length === 0) {
-          remove_cosmosdb_database(cosmosdb_client, database);
+          return remove_cosmosdb_database(cosmosdb_client, database);
         } else {
-          remove_cosmosdb_database(cosmosdb_client, database).then(() =>
+          return remove_cosmosdb_database(cosmosdb_client, database).then(() =>
             remove_all_cosmosdb_databases(cosmosdb_client)
           );
         }

@@ -1,3 +1,10 @@
+import { ItemDefinition } from "@azure/cosmos";
+import cosmosdb_server from "@zeit/cosmosdb-server";
+
+import * as Cosmosdb_client from "./cosmosdb";
+import logger from "./logger";
+import * as Config_models from "../models/config";
+
 import {
   get_cosmosdb_client,
   start_cosmosdb_server,
@@ -5,10 +12,8 @@ import {
   stop_cosmosdb_server,
   remove_all_cosmosdb_databases,
 } from "../__tests__/helpers";
-import { ItemDefinition } from "@azure/cosmos";
-import * as Cosmosdb_client from "./cosmosdb";
-import * as Config_models from "../models/config";
-import cosmosdb_server from "@zeit/cosmosdb-server";
+
+logger.info = jest.fn();
 
 const mock_port = 3000;
 const mock_cosmosdb: Config_models.cosmosdb = {

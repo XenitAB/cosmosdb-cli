@@ -1,4 +1,6 @@
 //common
+import JsonStreamStringify from "json-stream-stringify";
+
 import * as Backup_client from "./backup";
 import * as Config_models from "../models/config";
 import * as Cosmosdb_models from "../models/cosmosdb";
@@ -126,7 +128,7 @@ describe("backup tests - cosmosdb to azure storage account", () => {
     )
       .then(() =>
         expect(mock_save_item).toHaveBeenCalledWith(
-          JSON.stringify(mock_items_by_container1.items),
+          new JsonStreamStringify(mock_items_by_container1.items),
           `${mock_azure_storage_account.storage_account_prefix}${mock_items_by_container1.db_id}${mock_azure_storage_account.storage_account_delimiter}${mock_items_by_container1.container_id}${mock_azure_storage_account.storage_account_suffix}`,
           mock_azure_storage_account
         )
@@ -141,7 +143,7 @@ describe("backup tests - cosmosdb to azure storage account", () => {
     )
       .then(() =>
         expect(mock_save_item).toHaveBeenLastCalledWith(
-          JSON.stringify(mock_items_by_container3.items),
+          new JsonStreamStringify(mock_items_by_container3.items),
           `${mock_azure_storage_account.storage_account_prefix}${mock_items_by_container3.db_id}${mock_azure_storage_account.storage_account_delimiter}${mock_items_by_container3.container_id}${mock_azure_storage_account.storage_account_suffix}`,
           mock_azure_storage_account
         )
@@ -195,7 +197,7 @@ describe("backup tests - cosmosdb to filesystem", () => {
     ])
       .then(() =>
         expect(mock_save_item).toHaveBeenCalledWith(
-          JSON.stringify(mock_items_by_container1.items),
+          new JsonStreamStringify(mock_items_by_container1.items),
           `${mock_filesystem.filesystem_path}${mock_filesystem.filesystem_prefix}${mock_items_by_container1.db_id}${mock_filesystem.filesystem_delimiter}${mock_items_by_container1.container_id}${mock_filesystem.filesystem_suffix}`
         )
       )
@@ -209,7 +211,7 @@ describe("backup tests - cosmosdb to filesystem", () => {
     )
       .then(() =>
         expect(mock_save_item).toHaveBeenLastCalledWith(
-          JSON.stringify(mock_items_by_container3.items),
+          new JsonStreamStringify(mock_items_by_container3.items),
           `${mock_filesystem.filesystem_path}${mock_filesystem.filesystem_prefix}${mock_items_by_container3.db_id}${mock_filesystem.filesystem_delimiter}${mock_items_by_container3.container_id}${mock_filesystem.filesystem_suffix}`
         )
       )

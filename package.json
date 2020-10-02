@@ -18,6 +18,7 @@
     "convict": "^6.0.0",
     "figlet": "^1.4.0",
     "fs-extra": "^9.0.1",
+    "json-stream-stringify": "^2.0.3",
     "path": "^0.12.7",
     "winston": "^3.3.3"
   },
@@ -27,6 +28,7 @@
     "@types/figlet": "^1.2.0",
     "@types/fs-extra": "^9.0.1",
     "@types/jest": "^26.0.13",
+    "@types/json-stream-stringify": "^2.0.0",
     "@types/node": "^14.10.0",
     "@types/uuid": "^8.3.0",
     "@zeit/cosmosdb-server": "^0.8.3",

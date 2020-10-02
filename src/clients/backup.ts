@@ -1,3 +1,5 @@
+import JsonStreamStringify from "json-stream-stringify";
+
 import * as Fs_client from "./fs";
 
 import * as Storageaccount_client from "./storageaccount";
@@ -35,7 +37,8 @@ const save_item_to_storage_account = (
   const blob_name = use_datafactory_format
     ? `${account_name}/${db_id}/${container_id}/${datafactory_iso_date}/backup.json`
     : `${prefix_string}${db_id}${delimiter_string}${container_id}${suffix_string}`;
-  const items = JSON.stringify(items_by_container.items);
+
+  const items = new JsonStreamStringify(items_by_container.items);
 
   return Storageaccount_client.save_item(
     items,
@@ -83,7 +86,7 @@ const save_item_to_fs = (
   const suffix_string = filesystem.filesystem_suffix;
   const delimiter_string = filesystem.filesystem_delimiter;
   const file_name = `${file_path}${prefix_string}${db_id}${delimiter_string}${container_id}${suffix_string}`;
-  const items = JSON.stringify(items_by_container.items);
+  const items = new JsonStreamStringify(items_by_container.items);
 
   return Fs_client.save_item(items, file_name);
 };

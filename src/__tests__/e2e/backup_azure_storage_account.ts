@@ -115,9 +115,9 @@ afterAll(async (done) => {
 });
 
 describe("end-to-end backup azure-storage-account one db one container", () => {
-  it("should create one file with json array with three items", (done) => {
+  it("should create one file with json array with three items", async (done) => {
     expect.assertions(1);
-    remove_all_cosmosdb_databases(cosmosdb_client)
+    await remove_all_cosmosdb_databases(cosmosdb_client)
       .then(() =>
         create_cosmosdb_db_container_items(
           cosmosdb_client,
